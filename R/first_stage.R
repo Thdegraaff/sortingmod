@@ -1,14 +1,23 @@
 library("dplyr")
 library("maxLik")
 
-first_stage <- function(code, Z, X){
+first_stage <- function(code, Z, X, dat){
+
+  X <- gsub(" ","",unlist(strsplit(X,"\\+")))
+  Z <- gsub(" ","",unlist(strsplit(Z,"\\+")))
+  code <- gsub(" ","",unlist(strsplit(code,"\\+")))
+
+  code  <- dat[code]
+  Z     <- dat[Z]
+  X     <- dat[X]
 
   Z <- data.frame(code,Z)
   X <- data.frame(code,X)
+  group <- names(X)[1]
 
   # First, create the city specific data matrices
   datacity <- X %>%
-    group_by(code) %>%
+    group_by_(group) %>%
     summarise_all(funs(mean))
   datacity <- data.matrix(datacity)
   rownames(datacity) <- datacity[,1]
