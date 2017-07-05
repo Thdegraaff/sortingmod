@@ -9,3 +9,9 @@ The package is constructed as an accompanying tool for the Summer School in “H
 # Components
 
 # Getting help
+
+# References
+
+Bayer, P., McMillan, R., & Rueben, K. (2004). An equilibrium model of sorting in an urban housing market (No. w10865). National Bureau of Economic Research.
+
+Berry, S., Levinsohn, J., & Pakes, A. (1995). Automobile prices in market equilibrium. Econometrica: Journal of the Econometric Society, 841-890.
