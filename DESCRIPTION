@@ -1,12 +1,25 @@
 Package: sortingmod
 Type: Package
-Title: What the Package Does (Title Case)
+Title: sortingmod is a package for estimating the sorting model.
 Version: 0.1.0
-Author: Or Levkovich, Thomas de Graaff
-Maintainer: The package maintainer <yourself@somewhere.net>
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+Authors@R: c(
+    person("Thomas", "de Graaff", email = "t.de.graaff@vu.nl", role = c("aut","cre")),
+    person("Or", "Levkovich", email = "o.d.levkovich@vu.nl", role = "aut"))
+Maintainer: Thomas de Graaff <t.de.graaff@vu.nl>
+Description: A package containing a set of functions to estimate the first 
+    and second stages of the sorting model (following Bayer et al (2004), 
+    Berry, Levinsohn and Pakes (1995)), as well as useful post-estimation 
+    functions to export and analyze the results and calculate 
+    willingness-to-pay values.
+imports:
+  plyr,
+  dplyr,
+  maxLik,
+  ivpack,
+  ggplot2,
+  sandwich,
+  stargazer
+License: GPL-2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
