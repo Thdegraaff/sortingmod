@@ -12,17 +12,18 @@ Description: A package containing a set of functions to estimate the first
     functions to export and analyze the results and calculate 
     willingness-to-pay values.
 imports:
-  plyr,
-  dplyr,
-  maxLik,
-  ivpack,
-  ggplot2,
-  sandwich,
-  stargazer
+    plyr,
+    dplyr,
+    maxLik,
+    ivpack,
+    ggplot2,
+    sandwich,
+    stargazer
+Suggests: knitr,
+    rmarkdown
 License: GPL-2
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.0.1
-Suggests: knitr,
-    rmarkdown
+
 VignetteBuilder: knitr
