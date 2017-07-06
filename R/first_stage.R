@@ -15,7 +15,8 @@
 #'
 #' @examples
 #' data <- municipality
-#' model_output <- first_stage("mun_code", c("age","income"), c("lnprice","monuments"), data)
+#' model_output <- first_stage("mun_code", c("age","income"),
+#'                 c("lnprice","monuments"), data)
 first_stage <- function(code_name, Z_names, X_names, dat){
 
   code  <- dat[code_name]

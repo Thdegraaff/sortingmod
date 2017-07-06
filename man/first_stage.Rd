@@ -27,5 +27,6 @@ Optimization occurs via the maxLik package for an obtimization of a conditional 
 }
 \examples{
 data <- municipality
-model_output <- first_stage("mun_code", c("age","income"), c("lnprice","monuments"), data)
+model_output <- first_stage("mun_code", c("age","income"),
+                c("lnprice","monuments"), data)
 }
