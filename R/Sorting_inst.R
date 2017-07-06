@@ -1,10 +1,8 @@
 library("dplyr")
-library("sandwich")
 
 sorting_inst <- function(m1, endog, dat){
 
   # Load data from first_stage estimation output
-
       z <- m1$Z_names
       x <- m1$X_names
       code <- m1$code_name
@@ -43,10 +41,8 @@ sorting_inst <- function(m1, endog, dat){
             # Run OLS to obtain preliminary results
                 formula <- formula(paste("asc ~", paste(x, collapse = " + ")))
                 ols.res <- lm(formula ,data = xj.ite)
-                # sqrt(diag(vcovHC(ols.res, type = "HC1"))) # Robust se
 
             # Generate instrument with contraction mapping
-
                 xj<- cbind(cons.=1,data.matrix(xj.ite[,x]))
                 dimnames(xj)[1] <- xj.ite[,code]
                 b <- solve(t(xj)%*%xj)%*%(t(xj)%*%yj)
@@ -70,11 +66,8 @@ sorting_inst <- function(m1, endog, dat){
                 }
                 xj.ite[,endog.var] <- xj[,endog.var]
       }
-
       sorting_inst <- xj[,endog.var]
       corr.inst <- cor(xj[,endog.var],datacity[,endog.var])
-
-      print(corr.inst)
 
   return(list(sorting_inst = sorting_inst,corr.inst= corr.inst))
 }
