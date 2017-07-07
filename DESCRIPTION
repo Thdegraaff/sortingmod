@@ -11,14 +11,16 @@ Description: A package containing a set of functions to estimate the first
     Berry, Levinsohn and Pakes (1995)), as well as useful post-estimation 
     functions to export and analyze the results and calculate 
     willingness-to-pay values.
-imports:
+Imports:
+    stats,
     plyr,
     dplyr,
     maxLik,
     ivpack,
     ggplot2,
     sandwich,
-    stargazer
+    stargazer,
+    magrittr
 Suggests: knitr,
     rmarkdown
 License: GPL-2

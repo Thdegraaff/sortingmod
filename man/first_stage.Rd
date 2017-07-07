@@ -16,7 +16,7 @@ first_stage(code_name, Z_names, X_names, dat)
 \item{dat}{Dataset to be used}
 }
 \value{
-A (maxlik) object with the estimates (maxlik) together with the indicators of the alternative chosen,
+A (maxLik) object with the estimates (maxLik) together with the indicators of the alternative chosen,
  the vectors with individual data, the vectors with city/regional data and the name of the reference alternative
 }
 \description{

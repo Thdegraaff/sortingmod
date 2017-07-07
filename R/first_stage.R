@@ -8,8 +8,12 @@
 #' @param X_names Indicates (with names or column numbers) the vectors with city/regional data
 #' @param dat Dataset to be used
 #'
-#' @return A (maxlik) object with the estimates (maxlik) together with the indicators of the alternative chosen,
+#' @return A (maxLik) object with the estimates (maxLik) together with the indicators of the alternative chosen,
 #'  the vectors with individual data, the vectors with city/regional data and the name of the reference alternative
+#'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by_ summarise_all funs
+#' @importFrom maxLik maxLik
 #'
 #' @export
 #'
