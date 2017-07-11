@@ -1,6 +1,6 @@
 library("dplyr")
 
-sorting_inst <- function(s1.results, endog, dat, n.iterations = 5, stepsize = 0.05){
+sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05){
 
   # Load data from first_stage estimation output
       z <- s1.results$Z_names
