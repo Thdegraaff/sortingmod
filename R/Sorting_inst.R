@@ -56,14 +56,16 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
           # Calculate observed count in each alternative.
               observed.count <- dat %>% group_by_(code) %>% summarise(observed.count = n())
 
+          # Set prelimnary input variables for the iteration
+              xj.ite <- datacity
+              yj <- data.matrix(datacity[,"asc"])
+              formula <- formula(paste(colnames(yj),"~", paste(x, collapse = " + ")))
+
           # Iteration
           for (ite in n.iterations){
             print(paste("iteration",ite,sep = " "))
 
             # Run OLS to obtain preliminary results
-                xj.ite <- datacity
-                yj <- data.matrix(datacity[,"asc"])
-                formula <- formula(paste(colnames(yj),"~", paste(x, collapse = " + ")))
                 ols.res <- lm(formula ,data = xj.ite)
 
             # Generate instrument with contraction mapping
@@ -97,6 +99,9 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                       break
                     }
                     difm.ite<-difm
+                }
+                if (convergence == FALSE){
+                  break
                 }
                 xj.ite[,endog.var] <- xj[,endog.var]
           }
