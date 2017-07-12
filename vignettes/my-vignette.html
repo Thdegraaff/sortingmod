@@ -87,24 +87,24 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p><code>sortingmod</code> solves the following model:</p>
 <p><span class="math display">\[U_{j}^{i}  =  \sum_{k=1}^{K}\beta_{k,0}X_{k,j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j} + \xi_j + \epsilon_{j}^{i}\]</span></p>
 <p>Where: <span class="math inline">\(U_{j}^{i}\)</span> is the utility of individual <span class="math inline">\(i\)</span> from alternative <span class="math inline">\(j\)</span>, <span class="math inline">\(X_{k,j}\)</span> is the value of the <span class="math inline">\(k\)</span>-th alternative characteristic in location <span class="math inline">\(j\)</span>, <span class="math inline">\(Z^{i}_{l}\)</span> is the value of the <span class="math inline">\(l\)</span>-th characteristic of individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\bar{Z_{l}}\)</span> is the sample mean of individual characteristic <span class="math inline">\(l\)</span>, <span class="math inline">\(\beta_{k,l}\)</span> is the cross effect coefficients, <span class="math inline">\(\xi_j\)</span> is an alternative specific error term, and <span class="math inline">\(\epsilon_{j}^{i}\)</span> is the individual error term.</p>
-<p>Due to likely correlation between prices and unobserved characteristics, it is necessary to estimate the sorting model in two steps.(See discussion in Berry et al. (1995)).</p>
+<p>Due to likely correlation between prices and unobserved characteristics, it is necessary to estimate the sorting model in two stages.(See discussion in Berry et al. (1995)).</p>
 </div>
 </div>
-<div id="first-step" class="section level2">
-<h2>First step</h2>
-<p>The first step of the sorting model involves estimating the cross effect coefficients, and treating <span class="math inline">\(\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j}\)</span> as alternative specific constants. Assuming that the random term is IID extreme value type I distributed, choice probabilities can be derived by a logit model estimation:</p>
+<div id="first-stage" class="section level2">
+<h2>First stage</h2>
+<p>The first stage of the sorting model involves estimating the cross effect coefficients, and treating <span class="math inline">\(\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j}\)</span> as alternative specific constants. Assuming that the random term is IID extreme value type I distributed, choice probabilities can be derived by a logit model estimation:</p>
 <p><span class="math display">\[P^{i}_{j} = \frac{e^{V_{j}^{i}}}{\sum_{j=1}^{J}e^{V_{j}^{i}}} = \frac{e^{(\delta_{j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j})}}{\sum_{j=1}^{J}e^{(\delta_{j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j})}}\]</span></p>
 <p>The cross-effect coefficients and alternative specific constants are estimated by maximizing the probability that individual <span class="math inline">\(i\)</span> choose location <span class="math inline">\(j\)</span>, using a maximum likelihood procedure (BHHH (Berndt et al., 1974)).</p>
 </div>
-<div id="second-step" class="section level2">
-<h2>Second step</h2>
-<p>The second step of the estimation involves estimating the equation:</p>
+<div id="second-stage" class="section level2">
+<h2>Second stage</h2>
+<p>The second stage of the estimation involves estimating the equation:</p>
 <p><span class="math display">\[\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j} + \xi_j\]</span></p>
 <p>where the vector of mean indirect utilities (<span class="math inline">\(\delta_{j}\)</span>) is explained by the alternative characteristics.</p>
 </div>
 <div id="endogeneity-in-the-observed-alternative-characteristics" class="section level2">
 <h2>Endogeneity in the observed alternative characteristics</h2>
-<p>Since prices are likely to be correlated with the error term <span class="math inline">\(\xi_j\)</span> the second step estimation follows a two stage least squares (2SLS) procedure to account for this endogeneity problem. Here, we follow the approach of  for instrument construction and construct a price instrument assuming no correlation exists with unobserved location heterogeneity. Namely, we compute the price vector which would clear the market under the assumption of <span class="math inline">\((\xi_j = 0)\)</span>.</p>
+<p>Since prices are likely to be correlated with the error term <span class="math inline">\(\xi_j\)</span> the second stage estimation follows a two stage least squares (2SLS) procedure to account for this endogeneity problem. Here, we follow the approach of  for instrument construction and construct a price instrument assuming no correlation exists with unobserved location heterogeneity. Namely, we compute the price vector which would clear the market under the assumption of <span class="math inline">\((\xi_j = 0)\)</span>.</p>
 </div>
 <div id="quick-start" class="section level2">
 <h2>Quick start</h2>
@@ -136,11 +136,173 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 ## 4 0.3364722  0.6418539
 ## 5 0.3364722  0.6418539
 ## 6 0.3364722  0.6418539</code></pre>
+<p>The function <code>first_stage</code> is used in order to estimate the first stage of the model. <code>first_stage</code> takes four arguments:</p>
+<ul>
+<li><code>code_name</code> - which indicates (with name or column number) the vector with alternative chosen.</li>
+<li><code>Z_names</code> - which indicates (with names or column numbers) the vectors with individual data.</li>
+<li><code>X_names</code> - which indicates (with names or column numbers) the vectors with alternative data.</li>
+<li><code>dat</code> - which indicates the Data to be used.</li>
+</ul>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">code_name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mun_code&quot;</span>)
+Z_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;income&quot;</span>)
+X_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lnprice&quot;</span>,<span class="st">&quot;nature&quot;</span>,<span class="st">&quot;monuments&quot;</span>)
+s1.results &lt;-<span class="st"> </span><span class="kw">first_stage</span>(code_name, Z_names, X_names, <span class="dt">dat =</span> municipality)</code></pre></div>
+<p>s1.results is a (maxLik) object, containing the estimation results and all relevant information. Several methods can be called on the object, including <code>summary, coef,</code> and <code>stdEr</code>. Calling <code>summary</code> provides a neat summary of the estimation, including the coefficients and std. errors of the cross-effect coefficients and the alternative-specific constants, which will later be used in the second stage of the estiamtion.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(s1.results)</code></pre></div>
+<pre><code>## --------------------------------------------
+## Maximum Likelihood estimation
+## BHHH maximisation, 7 iterations
+## Return code 2: successive function values within tolerance limit
+## Log-Likelihood: -36158.67 
+## 123  free parameters
+## Estimates:
+##                    Estimate Std. error t value  Pr(&gt; t)    
+## 307              -0.5606680  0.0960934  -5.835 5.39e-09 ***
+## 308              -2.7614490  0.2319672 -11.904  &lt; 2e-16 ***
+## 310              -2.1231646  0.1766434 -12.019  &lt; 2e-16 ***
+## 312              -3.2166858  0.2945732 -10.920  &lt; 2e-16 ***
+## 313              -2.7528025  0.2366434 -11.633  &lt; 2e-16 ***
+## 317              -3.3951384  0.3215367 -10.559  &lt; 2e-16 ***
+## 321              -1.6551572  0.1445584 -11.450  &lt; 2e-16 ***
+## 327              -2.5397204  0.2121822 -11.970  &lt; 2e-16 ***
+## 331              -4.0955761  0.4509702  -9.082  &lt; 2e-16 ***
+## 335              -2.9264729  0.2566326 -11.403  &lt; 2e-16 ***
+## 339              -4.5990347  0.5802481  -7.926 2.26e-15 ***
+## 340              -2.9379529  0.2568547 -11.438  &lt; 2e-16 ***
+## 342              -2.2674393  0.1866802 -12.146  &lt; 2e-16 ***
+## 344               0.7205892  0.0707770  10.181  &lt; 2e-16 ***
+## 345              -1.6366926  0.1435292 -11.403  &lt; 2e-16 ***
+## 351              -3.4010531  0.3215123 -10.578  &lt; 2e-16 ***
+## 352              -2.4381938  0.2044763 -11.924  &lt; 2e-16 ***
+## 353              -2.0338507  0.1702925 -11.943  &lt; 2e-16 ***
+## 355              -2.0647958  0.1687775 -12.234  &lt; 2e-16 ***
+## 356              -1.5362528  0.1377381 -11.153  &lt; 2e-16 ***
+## 358              -2.3297884  0.1945095 -11.978  &lt; 2e-16 ***
+## 362              -1.6815129  0.1447001 -11.621  &lt; 2e-16 ***
+## 363               0.5010588  0.0737225   6.797 1.07e-11 ***
+## 370              -3.7542353  0.3824877  -9.815  &lt; 2e-16 ***
+## 375              -2.4373179  0.2044858 -11.919  &lt; 2e-16 ***
+## 376              -3.7754974  0.3824582  -9.872  &lt; 2e-16 ***
+## 377              -3.4932853  0.3242483 -10.773  &lt; 2e-16 ***
+## 381              -2.5454836  0.2122574 -11.992  &lt; 2e-16 ***
+## 383              -2.3746813  0.1977738 -12.007  &lt; 2e-16 ***
+## 384              -2.8947530  0.2494117 -11.606  &lt; 2e-16 ***
+## 385              -2.9911037  0.2647162 -11.299  &lt; 2e-16 ***
+## 392              -0.8443662  0.1056539  -7.992 1.33e-15 ***
+## 393              -4.3146530  0.5034402  -8.570  &lt; 2e-16 ***
+## 394              -0.8682515  0.1065597  -8.148 3.70e-16 ***
+## 396              -2.1988591  0.1811766 -12.137  &lt; 2e-16 ***
+## 397              -2.6925654  0.2264788 -11.889  &lt; 2e-16 ***
+## 402              -1.4699429  0.1330690 -11.046  &lt; 2e-16 ***
+## 406              -2.3832822  0.1978533 -12.046  &lt; 2e-16 ***
+## 415              -3.2484426  0.2945718 -11.028  &lt; 2e-16 ***
+## 417              -4.2681897  0.4541676  -9.398  &lt; 2e-16 ***
+## 424              -3.9111189  0.4124852  -9.482  &lt; 2e-16 ***
+## 425              -2.8934454  0.2499823 -11.575  &lt; 2e-16 ***
+## 431              -3.5433593  0.3384153 -10.470  &lt; 2e-16 ***
+## 437              -3.5211406  0.3384179 -10.405  &lt; 2e-16 ***
+## 439              -1.4948942  0.1351799 -11.059  &lt; 2e-16 ***
+## 450              -3.9040533  0.4123496  -9.468  &lt; 2e-16 ***
+## 451              -2.7008864  0.2315733 -11.663  &lt; 2e-16 ***
+## 453              -2.0928416  0.1742947 -12.007  &lt; 2e-16 ***
+## 457              -3.2149658  0.2944265 -10.919  &lt; 2e-16 ***
+## 473              -3.7601511  0.3588945 -10.477  &lt; 2e-16 ***
+## 478              -3.9098028  0.4123741  -9.481  &lt; 2e-16 ***
+## 479              -1.1845149  0.1192444  -9.934  &lt; 2e-16 ***
+## 482              -2.9871361  0.2645995 -11.289  &lt; 2e-16 ***
+## 484              -1.1424738  0.1177881  -9.699  &lt; 2e-16 ***
+## 489              -1.8906152  0.1599229 -11.822  &lt; 2e-16 ***
+## 501              -3.2998843  0.3070145 -10.748  &lt; 2e-16 ***
+## 502              -1.6900030  0.1467475 -11.516  &lt; 2e-16 ***
+## 503              -0.5245596  0.0950524  -5.519 3.42e-08 ***
+## 505              -0.9273765  0.1083876  -8.556  &lt; 2e-16 ***
+## 512              -2.6561163  0.2257593 -11.765  &lt; 2e-16 ***
+## 513              -0.2040765  0.0862979  -2.365 0.018040 *  
+## 518               0.3790238  0.0750228   5.052 4.37e-07 ***
+## 523              -2.9884793  0.2646854 -11.291  &lt; 2e-16 ***
+## 530              -2.1456368  0.1786962 -12.007  &lt; 2e-16 ***
+## 531              -2.1422580  0.1787882 -11.982  &lt; 2e-16 ***
+## 534              -2.9979155  0.2646182 -11.329  &lt; 2e-16 ***
+## 537              -0.3183527  0.0889692  -3.578 0.000346 ***
+## 542              -2.5269015  0.2121775 -11.909  &lt; 2e-16 ***
+## 545              -2.6519753  0.2257624 -11.747  &lt; 2e-16 ***
+## 546              -1.3658790  0.1284908 -10.630  &lt; 2e-16 ***
+## 547              -2.4062900  0.2009895 -11.972  &lt; 2e-16 ***
+## 553              -2.6077451  0.2209529 -11.802  &lt; 2e-16 ***
+## 556              -0.2973105  0.0887553  -3.350 0.000809 ***
+## 569              -2.4394897  0.2045055 -11.929  &lt; 2e-16 ***
+## 575              -2.5588962  0.2122008 -12.059  &lt; 2e-16 ***
+## 576              -3.1398434  0.2833756 -11.080  &lt; 2e-16 ***
+## 579              -2.4874975  0.2082406 -11.945  &lt; 2e-16 ***
+## 584              -3.1318991  0.2834256 -11.050  &lt; 2e-16 ***
+## 585              -2.3007943  0.1915646 -12.011  &lt; 2e-16 ***
+## 588              -3.4997075  0.3383268 -10.344  &lt; 2e-16 ***
+## 589              -3.3983221  0.3216118 -10.567  &lt; 2e-16 ***
+## 590              -2.2785734  0.1887207 -12.074  &lt; 2e-16 ***
+## 597              -2.2300449  0.1860179 -11.988  &lt; 2e-16 ***
+## 599               0.3446673  0.0753982   4.571 4.85e-06 ***
+## 603              -0.1859537  0.0859338  -2.164 0.030471 *  
+## 606              -1.4451536  0.1320264 -10.946  &lt; 2e-16 ***
+## 610              -2.8619437  0.2498411 -11.455  &lt; 2e-16 ***
+## 611              -4.0866056  0.4510177  -9.061  &lt; 2e-16 ***
+## 613              -2.7513505  0.2366563 -11.626  &lt; 2e-16 ***
+## 614              -3.0003330  0.2647088 -11.334  &lt; 2e-16 ***
+## 617              -3.4996591  0.3383369 -10.344  &lt; 2e-16 ***
+## 620              -3.3946964  0.3214919 -10.559  &lt; 2e-16 ***
+## 622               0.1546633  0.0788559   1.961 0.049839 *  
+## 626              -2.4976988  0.2082237 -11.995  &lt; 2e-16 ***
+## 627              -0.1699027  0.0855513  -1.986 0.047036 *  
+## 629              -0.4136449  0.0918714  -4.502 6.72e-06 ***
+## 632              -1.8493236  0.1569898 -11.780  &lt; 2e-16 ***
+## 637              -0.1180428  0.0844389  -1.398 0.162123    
+## 638              -3.3132798  0.3070574 -10.790  &lt; 2e-16 ***
+## 642              -2.2295127  0.1860287 -11.985  &lt; 2e-16 ***
+## 689              -3.3007478  0.3070147 -10.751  &lt; 2e-16 ***
+## 707              -3.3999559  0.3215163 -10.575  &lt; 2e-16 ***
+## 736              -2.2981535  0.1915267 -11.999  &lt; 2e-16 ***
+## 852              -3.6242866  0.3582652 -10.116  &lt; 2e-16 ***
+## 880              -3.2996095  0.3071501 -10.743  &lt; 2e-16 ***
+## 1525             -0.1814107  0.0858543  -2.113 0.034600 *  
+## 1581             -2.0289897  0.1689919 -12.006  &lt; 2e-16 ***
+## 1621             -1.6059684  0.1415747 -11.344  &lt; 2e-16 ***
+## 1696             -3.1310797  0.2833520 -11.050  &lt; 2e-16 ***
+## 1783             -0.1285590  0.0846626  -1.518 0.128892    
+## 1842             -0.0953785  0.0839287  -1.136 0.255779    
+## 1884             -3.0596418  0.2735079 -11.187  &lt; 2e-16 ***
+## 1892             -0.0376039  0.0826847  -0.455 0.649262    
+## 1901             -2.4397071  0.2045319 -11.928  &lt; 2e-16 ***
+## 1904             -1.8496860  0.1570236 -11.780  &lt; 2e-16 ***
+## 1916             -0.1723156  0.0856456  -2.012 0.044224 *  
+## 1926              0.0799010  0.0803468   0.994 0.320003    
+## age:lnprice       0.0284701  0.0054724   5.203 1.97e-07 ***
+## income:lnprice    0.0523763  0.0078839   6.643 3.07e-11 ***
+## age:nature       -0.0033900  0.0004655  -7.283 3.27e-13 ***
+## income:nature     0.5685832  0.0690459   8.235  &lt; 2e-16 ***
+## age:monuments    -0.2272055  0.1232954  -1.843 0.065362 .  
+## income:monuments -0.0272405  0.0071970  -3.785 0.000154 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## --------------------------------------------</code></pre>
+<p>Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features.</p>
+<p>The <code>second_stage</code> function contains an optional (but recommended argument to include an instrumental variable. However, <code>sortingmod</code> also includes the function <code>sorting_inst</code>, that generates an instrument following Bayer et al. (2004). The calculation of the instrument utilizes the equilibrium properties of the model, and results in an instrument which clears the market assuming no correlation exists with unobserved heterogeneity between alternatives.</p>
+<p><code>sorting_inst</code> takes several (non-optional) arguments:</p>
+<ul>
+<li><code>s1.results</code> - which indicates the (maxLik) object estimation results of the first stage of the sorting model.</li>
+<li><code>endog</code> - which indicates the endogenous variable to be instrumented.</li>
+<li><code>dat</code> Dataset to be used.</li>
+</ul>
+<p>Unlike <code>first_stage</code>, <code>sorting_inst</code> does not take chosen alternatives, individual characteristics or alternative characteristics as arguments. This is because they are already specified as arguments in the <code>s1.results</code> object. However, note that <code>dat</code> must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in <code>X_names</code>).</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># endog &lt;- c(&quot;lnprice&quot;)</span>
+<span class="co"># inst.var &lt;- sorting_inst(s1.results, endog, dat = municipality)</span></code></pre></div>
+<p><code>sorting_inst</code> returns a list <code>inst.var</code> which contains the vector of the instrument, and the correlation of the instrument with the original endogenous variable.</p>
 </div>
 <div id="post-estimation" class="section level2">
 <h2>Post estimation</h2>
 <div id="marginal-willingness-to-pay-values" class="section level3">
 <h3>Marginal willingness-to-pay values</h3>
+</div>
+<div id="references" class="section level3">
+<h3>References</h3>
 </div>
 <div id="appendix" class="section level3">
 <h3>Appendix</h3>

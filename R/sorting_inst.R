@@ -16,6 +16,7 @@
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by_ summarise inner_join filter
+#' @importFrom maxLik maxLik
 #'
 #' @export
 #'

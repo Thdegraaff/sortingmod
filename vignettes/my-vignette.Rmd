@@ -113,8 +113,8 @@ Unlike `first_stage`, `sorting_inst` does not take chosen alternatives, individu
 However, note that `dat` must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in `X_names`).
 
 ```{r, results = "hide"}
-endog <- c("lnprice")
-inst.var <- sorting_inst(s1.results, endog, dat = municipality)
+# endog <- c("lnprice")
+# inst.var <- sorting_inst(s1.results, endog, dat = municipality) ### Returns an error when build & reload
 ```
 
 `sorting_inst` returns a list `inst.var` which contains the vector of the instrument, and the correlation of the instrument with the original endogenous variable.

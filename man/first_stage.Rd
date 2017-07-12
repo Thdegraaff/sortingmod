@@ -11,7 +11,7 @@ first_stage(code_name, Z_names, X_names, dat)
 
 \item{Z_names}{Indicates (with names or column numbers) the vectors with individual data}
 
-\item{X_names}{Indicates (with names or column numbers) the vectors with city/regional data}
+\item{X_names}{Indicates (with names or column numbers) the vectors with alternative data}
 
 \item{dat}{Dataset to be used}
 }
