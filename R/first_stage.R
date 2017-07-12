@@ -5,7 +5,7 @@
 #'
 #' @param code_name Indicates (with name or column number) the vector with alternative chosen
 #' @param Z_names Indicates (with names or column numbers) the vectors with individual data
-#' @param X_names Indicates (with names or column numbers) the vectors with city/regional data
+#' @param X_names Indicates (with names or column numbers) the vectors with alternative data
 #' @param dat Dataset to be used
 #'
 #' @return A (maxLik) object with the estimates (maxLik) together with the indicators of the alternative chosen,
