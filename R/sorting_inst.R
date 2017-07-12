@@ -56,7 +56,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               asc.df[,code] <- as.character(asc.df[,code])
               asc.df <- rbind(c(as.numeric(base_alt),0),asc.df)
 
-              asc.se.weights <- data.frame(rownames(summary(m1)$estimate[asc.index,]), summary(m1)$estimate[asc.index,c("Std. error")])
+              asc.se.weights <- data.frame(names(coef(s1.results)[asc.index]), stdEr(s1.results)[asc.index])
               names(asc.se.weights) <- c(code, "se.weights")
               asc.se.weights[,code] <- as.character(asc.se.weights[,code])
               asc.se.weights <- rbind(c(as.numeric(base_alt),median(asc.se.weights$se.weights)),asc.se.weights)
