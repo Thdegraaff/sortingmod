@@ -5,11 +5,11 @@
 #' Instrument is calculated using a logit model estimation, assuming market clearing conditions
 #' given no unobserved heterogeneity between alternative choices (following Bayer et al. (2004))
 #'
-#' @param s1.results Estimation results of the first stage of the sorting model
-#' @param endog Endogenous variable to be instrumented
+#' @param s1.results Indicates the (maxLik) object estimation results of the first stage of the sorting model
+#' @param endog Indicates the endogenous variable to be instrumented
 #' @param dat Dataset to be used
-#' @param n.iterations Number of iterations
-#' @param stepsize Contraction-mapping scaling coefficient
+#' @param n.iterations Indicates the number of iterations
+#' @param stepsize Indicates the contraction-mapping scaling coefficient
 #'
 #' @return A list containing (1) a vector of the computed instrument, and (2) the correlation between
 #' the computed instrument and the original variable.

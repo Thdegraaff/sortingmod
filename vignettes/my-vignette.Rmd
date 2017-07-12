@@ -34,18 +34,18 @@ Where:
 		$\xi_j$ is an alternative specific error term, and
 		$\epsilon_{j}^{i}$ is the individual error term.  
 		
-Due to likely correlation between prices and unobserved characteristics, it is necessary to estimate the sorting model in two steps.(See discussion in Berry et al. (1995)).
+Due to likely correlation between prices and unobserved characteristics, it is necessary to estimate the sorting model in two stages.(See discussion in Berry et al. (1995)).
 
 
-## First step
-The first step of the sorting model involves estimating the cross effect coefficients, and treating $\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j}$ as alternative specific constants. Assuming that the random term is IID extreme value type I distributed, choice probabilities can be derived by a logit model estimation:
+## First stage
+The first stage of the sorting model involves estimating the cross effect coefficients, and treating $\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j}$ as alternative specific constants. Assuming that the random term is IID extreme value type I distributed, choice probabilities can be derived by a logit model estimation:
 
 $$P^{i}_{j} = \frac{e^{V_{j}^{i}}}{\sum_{j=1}^{J}e^{V_{j}^{i}}} = \frac{e^{(\delta_{j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j})}}{\sum_{j=1}^{J}e^{(\delta_{j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j})}}$$
 
 The cross-effect coefficients and alternative specific constants are estimated by maximizing the probability that individual $i$ choose location $j$, using a maximum likelihood procedure (BHHH (Berndt et al., 1974)).
 
-## Second step
-The second step of the estimation involves estimating the equation: 
+## Second stage
+The second stage of the estimation involves estimating the equation: 
 
 $$\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j} + \xi_j$$
 
@@ -54,7 +54,7 @@ where the vector of mean indirect utilities ($\delta_{j}$) is explained by the a
 
 ## Endogeneity in the observed alternative characteristics
 
-Since prices are likely to be correlated with the error term $\xi_j$ the second step estimation follows a two stage least squares (2SLS) procedure to account for this endogeneity problem.
+Since prices are likely to be correlated with the error term $\xi_j$ the second stage estimation follows a two stage least squares (2SLS) procedure to account for this endogeneity problem.
 Here, we follow the approach of \citet{Bayer2004} for instrument construction and construct a price instrument assuming no correlation exists with unobserved location heterogeneity. Namely, we compute the price vector which would clear the market under the assumption of $(\xi_j = 0)$.
 
 
@@ -73,16 +73,55 @@ Users can work on their own data, or use the data which is saved in the workspac
 load("~/sortingmod/data/municipality.rda")
 ```
 
-The data for the estimation should be in data frame format, which contains separate columns for individual characteristics, the chosen alternative and its characteristics.
+The data for the estimation should be in data frame format, which contains separate columns for individual characteristics, the chosen alternative and its characteristics. 
 
 ```{r}
 head(municipality)
 ```
 
+The function `first_stage` is used in order to estimate the first stage of the model. `first_stage` takes four arguments: 
+
+- `code_name` - which indicates (with name or column number) the vector with alternative chosen.
+- `Z_names` - which indicates (with names or column numbers) the vectors with individual data.
+- `X_names` - which indicates (with names or column numbers) the vectors with alternative data.
+- `dat` - which indicates the Data to be used.
+
+```{r, results = "hide"}
+code_name <- c("mun_code")
+Z_names <- c("age","income")
+X_names <- c("lnprice","nature","monuments")
+s1.results <- first_stage(code_name, Z_names, X_names, dat = municipality)
+```
+
+s1.results is a (maxLik) object, containing the estimation results and all relevant information. Several methods can be called on the object, including `summary, coef,` and `stdEr`. Calling `summary` provides a neat summary of the estimation, including the coefficients and std. errors of the cross-effect coefficients and the alternative-specific constants, which will later be used in the second stage of the estiamtion. 
+
+```{r}
+summary(s1.results)
+```
+
+Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features. 
+
+The `second_stage` function contains an optional (but recommended argument to include an instrumental variable. However, `sortingmod` also includes the function `sorting_inst`, that generates an instrument following Bayer et al. (2004). The calculation of the instrument  utilizes the equilibrium properties of the model, and results in an instrument which clears the market assuming no correlation exists with unobserved heterogeneity between alternatives.
+
+`sorting_inst` takes several (non-optional) arguments: 
+
+- `s1.results` - which indicates the (maxLik) object estimation results of the first stage of the sorting model.
+- `endog` - which indicates the endogenous variable to be instrumented.
+- `dat` Dataset to be used.
+
+Unlike `first_stage`, `sorting_inst` does not take chosen alternatives, individual characteristics or alternative characteristics as arguments. This is because they are already specified as arguments in the `s1.results` object.
+However, note that `dat` must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in `X_names`).
+
+```{r, results = "hide"}
+endog <- c("lnprice")
+inst.var <- sorting_inst(s1.results, endog, dat = municipality)
+```
+
+`sorting_inst` returns a list `inst.var` which contains the vector of the instrument, and the correlation of the instrument with the original endogenous variable.
 
 ## Post estimation
 ### Marginal willingness-to-pay values
-
+### References
 ### Appendix
 
 ### .
