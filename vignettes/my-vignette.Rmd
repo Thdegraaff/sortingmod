@@ -9,6 +9,87 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
+## Introduction
+sortingmod is a package for estimating the sorting model - a discrete choice model which explains the location decision of heterogeneous individuals over a set of alternative locations. The model is developed by Bayer et al. (2004) following the work of Berry et al. (1995). It relies on the assumptions that individuals choose a location that maximizes their utility, and that heterogeneous individuals with different characteristics have different preferences, and different valuation for location characteristics. The results of the model provide choice probabilities for each alternative, as well as insight on the valuation patterns of heterogeneous agents, and marginal willingness-to-pay values for location characteristics.
+
+The package is constructed as an accompanying tool for the Summer School in “Hedonic price analysis and the residential location choice”, hosted by the Kraks Fond - Institute for Urban Economic Research (Copenhagen, Denmark).
+
+## Installation
+
+
+
+### Estimation of the residential sorting model
+`Sortingmod` package follows the methodology described in Bayer et al. (2004) to analyze how heterogeneous individuals sort themselves into alternative locations based on their preferneces for local characteristics. 
+
+`sortingmod` solves the following model:
+
+$$U_{j}^{i}  =  \sum_{k=1}^{K}\beta_{k,0}X_{k,j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j} + \xi_j + \epsilon_{j}^{i}$$
+
+Where:
+		$U_{j}^{i}$ is the utility of individual $i$ from alternative $j$,
+		$X_{k,j}$ is the value of the $k$-th alternative characteristic in location $j$, 
+		$Z^{i}_{l}$ is the value of the $l$-th characteristic of individual $i$,
+		$\bar{Z_{l}}$ is the sample mean of individual characteristic $l$,
+		$\beta_{k,l}$ is the cross effect coefficients,
+		$\xi_j$ is an alternative specific error term, and
+		$\epsilon_{j}^{i}$ is the individual error term.  
+		
+Due to likely correlation between prices and unobserved characteristics, it is necessary to estimate the sorting model in two steps.(See discussion in Berry et al. (1995)).
+
+
+## First step
+The first step of the sorting model involves estimating the cross effect coefficients, and treating $\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j}$ as alternative specific constants. Assuming that the random term is IID extreme value type I distributed, choice probabilities can be derived by a logit model estimation:
+
+$$P^{i}_{j} = \frac{e^{V_{j}^{i}}}{\sum_{j=1}^{J}e^{V_{j}^{i}}} = \frac{e^{(\delta_{j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j})}}{\sum_{j=1}^{J}e^{(\delta_{j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j})}}$$
+
+The cross-effect coefficients and alternative specific constants are estimated by maximizing the probability that individual $i$ choose location $j$, using a maximum likelihood procedure (BHHH (Berndt et al., 1974)).
+
+## Second step
+The second step of the estimation involves estimating the equation: 
+
+$$\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j} + \xi_j$$
+
+where the vector of mean indirect utilities ($\delta_{j}$) is explained by the alternative characteristics. 
+
+
+## Endogeneity in the observed alternative characteristics
+
+Since prices are likely to be correlated with the error term $\xi_j$ the second step estimation follows a two stage least squares (2SLS) procedure to account for this endogeneity problem.
+Here, we follow the approach of \citet{Bayer2004} for instrument construction and construct a price instrument assuming no correlation exists with unobserved location heterogeneity. Namely, we compute the price vector which would clear the market under the assumption of $(\xi_j = 0)$.
+
+
+## Quick start
+
+The purpose of this section is to give a general sense of the package, its components and an overview of how to use it. 
+
+First, we load the package :
+```{r}
+library(sortingmod)
+```
+
+Users can work on their own data, or use the data which is saved in the workspace.
+
+```{r}
+load("~/sortingmod/data/municipality.rda")
+```
+
+The data for the estimation should be in data frame format, which contains separate columns for individual characteristics, the chosen alternative and its characteristics.
+
+```{r}
+head(municipality)
+```
+
+
+## Post estimation
+### Marginal willingness-to-pay values
+
+### Appendix
+
+### .
+### .
+
+### Vignette defaults
+
 Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The `html_vignette` output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The `html_vignette` format:
 
 - Never uses retina figures

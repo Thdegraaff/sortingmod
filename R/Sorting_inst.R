@@ -1,5 +1,29 @@
-library("dplyr")
 
+#' Calculates an instrument for an endogenous variable in a sorting model setting
+#'
+#' @details
+#' Instrument is calculated using a logit model estimation, assuming market clearing conditions
+#' given no unobserved heterogeneity between alternative choices (following Bayer et al. (2004))
+#'
+#' @param s1.results Estimation results of the first stage of the sorting model
+#' @param endog Endogenous variable to be instrumented
+#' @param dat Dataset to be used
+#' @param n.iterations Number of iterations
+#' @param stepsize Contraction-mapping scaling coefficient
+#'
+#' @return A list containing (1) a vector of the computed instrument, and (2) the correlation between
+#' the computed instrument and the original variable.
+#'
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by_ summarise inner_join filter
+#'
+#' @export
+#'
+#' @examples
+#' data <- municipality
+#' model_output <- first_stage("mun_code", c("age","income"),
+#'                 c("lnprice","monuments"), data)
+#' phat <- sorting_inst(model_output, "lnprice", data)
 sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05){
 
   # Prepare inputs
@@ -29,9 +53,14 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                                    alts, row.names = NULL)
               names(asc.df) <- c(code, "asc")
               asc.df[,code] <- as.character(asc.df[,code])
-              asc.df <- rbind(c(base_alt,0),asc.df)
+              asc.df <- rbind(c(as.numeric(base_alt),0),asc.df)
 
-              datacity <- asc.df %>% inner_join(X, by=code) %>% group_by_(code) %>% filter(row_number()==1)
+              asc.se.weights <- data.frame(rownames(summary(m1)$estimate[asc.index,]), summary(m1)$estimate[asc.index,c("Std. error")])
+              names(asc.se.weights) <- c(code, "se.weights")
+              asc.se.weights[,code] <- as.character(asc.se.weights[,code])
+              asc.se.weights <- rbind(c(as.numeric(base_alt),median(asc.se.weights$se.weights)),asc.se.weights)
+
+              datacity <- asc.df %>% inner_join(X, by=code) %>% inner_join(asc.se.weights, by=code) %>% group_by_(code) %>% filter(row_number()==1)
 
           # De-mean the invididual data, not where dummies
               dummies.ind <- grep(TRUE, apply(datamat,2, function(x)  all(x %in% c(0,1)))) # identify dummy variables
@@ -66,7 +95,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
             print(paste("iteration",ite,sep = " "))
 
             # Run OLS to obtain preliminary results
-                ols.res <- lm(formula ,data = xj.ite)
+                ols.res <- lm(formula ,data = xj.ite, weights = se.weights)
 
             # Generate instrument with contraction mapping
                 xj<- cbind(cons.=1,data.matrix(xj.ite[,x]))
@@ -76,12 +105,13 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                 Uij <- matrix(0,nrow=nrow(dat), ncol = nrow(xj))
 
                 difm<-100           # Reset convergence value of ite i
-                difm.ite <- difm    # Reset convergence value of ite i+1
+                difm.ite <- difm    # Reset convergence value of ite i-1
                 while (difm>0.0005){
                     for (i in 1:nrow(dat)){
                         xij <- kronecker(t(datamat[i,z]),as.matrix(xj[,x]),  make.dimnames=TRUE)
-                          #  col.order <- names(bij)
-                           # row.order <- paste0(":",c(base_alt,names(alts)))
+                             col.order <- colnames(xij)
+                             bij <- bij[col.order]
+                          #  row.order <-  paste0(":",c(base_alt,names(alts)))
                           #  xij<- xij[row.order,col.order]
                         Uij[i,] <- xij %*% bij + xj %*% b
                     }

@@ -1,7 +1,7 @@
 Package: sortingmod
 Type: Package
 Title: sortingmod is a package for estimating the sorting model.
-Version: 0.1.0
+Version: 0.1.1
 Authors@R: c(
     person("Thomas", "de Graaff", email = "t.de.graaff@vu.nl", role = c("aut","cre")),
     person("Or", "Levkovich", email = "o.d.levkovich@vu.nl", role = "aut"))
