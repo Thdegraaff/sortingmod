@@ -24,6 +24,7 @@
 #' model_output <- first_stage("mun_code", c("age","income"),
 #'                 c("lnprice","monuments"), data)
 #' phat <- sorting_inst(model_output, "lnprice", data)
+
 sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05){
 
   # Prepare inputs
