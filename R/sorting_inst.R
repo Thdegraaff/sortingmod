@@ -16,7 +16,7 @@
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by_ summarise inner_join filter
-#' @importFrom maxLik maxLik
+#' @importFrom maxLik maxLik stdEr coef
 #'
 #' @export
 #'
@@ -58,12 +58,12 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               asc.df[,code] <- as.character(asc.df[,code])
               asc.df <- rbind(c(as.numeric(base_alt),0),asc.df)
 
-              asc.se.weights <- data.frame(names(coef(s1.results)[asc.index]), stdEr(s1.results)[asc.index])
+              asc.se.weights <- data.frame(names(coef(s1.results)[asc.index]), 1/stdEr(s1.results)[asc.index])
               names(asc.se.weights) <- c(code, "se.weights")
               asc.se.weights[,code] <- as.character(asc.se.weights[,code])
               asc.se.weights <- rbind(c(as.numeric(base_alt),median(asc.se.weights$se.weights)),asc.se.weights)
 
-              datacity <- asc.df %>% inner_join(X, by=code) %>% inner_join(asc.se.weights, by=code) %>% group_by_(code) %>% filter(row_number()==1)
+              dataalt <- asc.df %>% inner_join(X, by=code) %>% inner_join(asc.se.weights, by=code) %>% group_by_(code) %>% filter(row_number()==1)
 
           # De-mean the invididual data, not where dummies
               dummies.ind <- grep(TRUE, apply(datamat,2, function(x)  all(x %in% c(0,1)))) # identify dummy variables
@@ -89,8 +89,8 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               observed.count <- dat %>% group_by_(code) %>% summarise(observed.count = n())
 
           # Set prelimnary input variables for the iteration
-              xj.ite <- datacity
-              yj <- data.matrix(datacity[,"asc"])
+              xj.ite <- dataalt
+              yj <- data.matrix(dataalt[,"asc"])
               formula <- formula(paste(colnames(yj),"~", paste(x, collapse = " + ")))
 
           # Iteration
@@ -144,7 +144,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
         if (convergence == TRUE){
           inst.var <- xj[,endog.var]
           print(inst.var)
-          inst.corr <- cor(xj[,endog.var],datacity[,endog.var])
+          inst.corr <- cor(xj[,endog.var],dataalt[,endog.var])
           print(paste("Correlation with endogenous variable == ",format(inst.corr,digits = 5),sep=" "))
         }else{
           inst.var <- NULL
