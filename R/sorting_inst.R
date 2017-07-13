@@ -37,7 +37,6 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               code <- s1.results$code_name
               base_alt <- s1.results$base_alt
 
-              dat <- dat
               datamat <- data.matrix(dat[,c(code,z)])
 
               endog.var = endog

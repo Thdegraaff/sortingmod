@@ -32,5 +32,6 @@ given no unobserved heterogeneity between alternative choices (following Bayer e
 data <- municipality
 model_output <- first_stage("mun_code", c("age","income"),
                 c("lnprice","monuments"), data)
+endog <- ("lnprice")
 phat <- sorting_inst(model_output, "lnprice", data)
 }
