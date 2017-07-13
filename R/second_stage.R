@@ -1,6 +1,39 @@
+#' Title Estimates the second of a sorting model
+#'
+#' @details This function estimates an OLS or an instrument variable.
+#' if an instrument variable procedure is needed both the instrument and the endogenous variables should be given
+#'
+#'
+#' @param s1.results Indicates the (maxLik) object estimation results of the first stage of the sorting model
+#' @param dat Dataset to be used
+#' @param endog Indicates the endogenous variable to be instrumented (from the dataset in parentheses)
+#' @param instr indicates  the intrument for the endogenous variable
+#'
+#' @return An estimation object
+#'
+#' @importFrom miscTools stdEr
+#' @importFrom magrittr %>%
+#' @importFrom dplyr group_by_ inner_join group_by
+#' @importFrom AER ivreg
+#'
+#' @export
+#'
+#' @examples
+#' data <- municipality
+#' model_output <- first_stage("mun_code", c("age","income"),
+#'                 c("lnprice","monuments"), data)
+#' endog <- ("lnprice")
+#' phat <- sorting_inst(model_output, "lnprice", data)
+#'
+#' second_stage(model_output, data)
+#' second_stage(model_output, data, "lnprice", phat[[1]])
+#'
+second_stage <- function(s1.results, dat, endog = NULL, instr = NULL){
 
-
-second_stage <- function(s1.results, dat, instrument = NULL){
+  if ((is.null(endog) & !is.null(instr)) | (!is.null(endog) & is.null(instr))){
+    print("If endogenous both instrument and indicator of the endogeneous variable should be given otherwise none should be given")
+    break
+  }
 
   # Load data from first_stage estimation output
   x <-      s1.results$X_names # coefficients of alternatives
@@ -11,25 +44,48 @@ second_stage <- function(s1.results, dat, instrument = NULL){
   X <- data.frame(dat[code],dat[x])
   X[,code] <- as.character(X[,code])
 
-  # Create alternative database
+  # retrieve alternative constants from the estimates
   asc.index <- names(s1.results$estimate)  %in%  as.character(X[,code])
   alts <- s1.results$estimate[asc.index]
   asc.df <- data.frame(names(s1.results$estimate)[asc.index],
                        alts, row.names = NULL)
   names(asc.df) <- c(code, "asc")
+
+  # Add the reference alternative to the dataframe
   asc.df[,code] <- as.character(asc.df[,code])
   asc.df <- rbind(c(as.numeric(base_alt),0),asc.df)
 
+  # Combine alternative dataframe with instrument dataframe if needed
+  if (is.null(instr)) {
+    asc.df <- data.frame(asc.df)
+  } else {
+    asc.df <- data.frame(asc.df, instr)
+  }
+
+  # Add the weights and include weight of the alternative (calculated by the median)
   asc.se.weights <- data.frame(names(coef(s1.results)[asc.index]), stdEr(s1.results)[asc.index])
   names(asc.se.weights) <- c(code, "se.weights")
   asc.se.weights[,code] <- as.character(asc.se.weights[,code])
   asc.se.weights <- rbind(c(as.numeric(base_alt),median(asc.se.weights$se.weights)),asc.se.weights)
 
-  datacity <- asc.df %>%
+  # Create alternative database
+  data_alt <- asc.df %>%
     inner_join(X, by=code) %>%
     inner_join(asc.se.weights, by=code) %>%
     group_by_(code) %>%
     filter(row_number()==1)
 
-  datacity
+  # Build the model formulae
+  formula_ols <- formula(paste("asc~", paste(x, collapse = " + ")))
+  formula_iv  <- formula(paste("asc~", paste(x, collapse = " + "),"|",
+                               paste(x, collapse = " + "),"-", paste(endog), "+ instr"))
+
+  # Do estimation; if no instrument is given just OLS; otherwise ivreg from the AER package
+  if (is.null(instr)) {
+    estimates <- lm(formula_ols, data = data_alt, weights = 1/se.weights)
+  } else {
+    estimates <- ivreg(formula_iv, data = data_alt, weights = 1/se.weights)
+  }
+
+  return(estimates)
 }

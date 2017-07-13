@@ -12,9 +12,11 @@ Description: A package containing a set of functions to estimate the first
     functions to export and analyze the results and calculate 
     willingness-to-pay values.
 Imports:
+    AER,
     stats,
     plyr,
     dplyr,
+    miscTools,
     maxLik,
     ivpack,
     ggplot2,
