@@ -64,6 +64,9 @@ first_stage <- function(code_name, Z_names, X_names, dat){
     mat <- mat[,-1]
     for (i in 1:nrow(data)){
       xij <- cbind(mat,kronecker(t(data[i,2:ncol(data)]),(datacity[,2:ncol(datacity)]), make.dimnames=TRUE))
+          col.order <- c(seq(1:(nrow(datacity)-1)), match(varNames, colnames(xij))[!is.na(match(varNames, colnames(xij)))])
+          row.order <- c(1,match(paste0(":",varNames), rownames(xij))[!is.na(match(paste0(":",varNames), rownames(xij)))])
+          xij <- xij[row.order, col.order]
       xbij <- xij[,nrow(datacity):length(varNames)] %*% param[nrow(datacity):length(varNames)] + c(0,param[1:nrow(datacity)-1])
       pij <- exp(xbij)/sum(exp(xbij))
       Prob[i] <- log(pij[id[i]])
