@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas de Graaff and Or Levkovich" />
 
-<meta name="date" content="2017-07-12" />
+<meta name="date" content="2017-07-13" />
 
 <title>sortingmod</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">sortingmod</h1>
 <h4 class="author"><em>Thomas de Graaff and Or Levkovich</em></h4>
-<h4 class="date"><em>2017-07-12</em></h4>
+<h4 class="date"><em>2017-07-13</em></h4>
 
 
 
@@ -293,7 +293,7 @@ s1.results &lt;-<span class="st"> </span><span class="kw">first_stage</span>(cod
 </ul>
 <p>Unlike <code>first_stage</code>, <code>sorting_inst</code> does not take chosen alternatives, individual characteristics or alternative characteristics as arguments. This is because they are already specified as arguments in the <code>s1.results</code> object. However, note that <code>dat</code> must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in <code>X_names</code>).</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># endog &lt;- c(&quot;lnprice&quot;)</span>
-<span class="co"># inst.var &lt;- sorting_inst(s1.results, endog, dat = municipality)</span></code></pre></div>
+<span class="co"># inst.var &lt;- sorting_inst(s1.results, endog, dat = municipality) ### Returns an error when build &amp; reload</span></code></pre></div>
 <p><code>sorting_inst</code> returns a list <code>inst.var</code> which contains the vector of the instrument, and the correlation of the instrument with the original endogenous variable.</p>
 </div>
 <div id="post-estimation" class="section level2">

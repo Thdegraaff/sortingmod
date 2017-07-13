@@ -18,7 +18,7 @@ summary(s1.results)
 
 ## ---- results = "hide"---------------------------------------------------
 # endog <- c("lnprice")
-# inst.var <- sorting_inst(s1.results, endog, dat = municipality)
+# inst.var <- sorting_inst(s1.results, endog, dat = municipality) ### Returns an error when build & reload
 
 ## ---- fig.show='hold'----------------------------------------------------
 plot(1:10)
