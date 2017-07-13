@@ -18,9 +18,11 @@
 #' @export
 #'
 #' @examples
+#' code_name <- c("mun_code")
+#' Z_names <- c("age","income")
+#' X_names <- c("lnprice","nature","monuments")
 #' data <- municipality
-#' model_output <- first_stage("mun_code", c("age","income"),
-#'                 c("lnprice","monuments"), data)
+#' model_output <- first_stage(code_name, Z_names, X_names, data)
 first_stage <- function(code_name, Z_names, X_names, dat){
 
   code  <- dat[code_name]
