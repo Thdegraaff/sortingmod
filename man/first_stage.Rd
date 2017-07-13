@@ -2,7 +2,7 @@
 % Please edit documentation in R/first_stage.R
 \name{first_stage}
 \alias{first_stage}
-\title{Calculates the first stage of a sorting model}
+\title{Estimates the first stage of a sorting model}
 \usage{
 first_stage(code_name, Z_names, X_names, dat)
 }
@@ -20,7 +20,7 @@ A (maxLik) object with the estimates (maxLik) together with the indicators of th
  the vectors with individual data, the vectors with city/regional data and the name of the reference alternative
 }
 \description{
-Calculates the first stage of a sorting model
+Estimates the first stage of a sorting model
 }
 \details{
 Optimization occurs via the maxLik package for an obtimization of a conditional logit model

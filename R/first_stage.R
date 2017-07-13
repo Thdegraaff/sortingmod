@@ -1,4 +1,4 @@
-#' Calculates the first stage of a sorting model
+#' Estimates the first stage of a sorting model
 #'
 #' @details
 #' Optimization occurs via the maxLik package for an obtimization of a conditional logit model
