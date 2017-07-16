@@ -11,7 +11,7 @@
 #' @param n.iterations Indicates the number of iterations
 #' @param stepsize Indicates the contraction-mapping scaling coefficient
 #'
-#' @return A list containing (1) a vector of the computed instrument, and (2) the correlation between
+#' @return A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between
 #' the computed instrument and the original variable.
 #'
 #' @importFrom magrittr %>%
