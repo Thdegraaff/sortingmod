@@ -16,7 +16,9 @@
 #'
 #' @importFrom magrittr %>%
 #' @importFrom dplyr group_by_ summarise inner_join filter
-#' @importFrom maxLik maxLik stdEr coef
+#' @importFrom maxLik maxLik
+#' @importFrom AER ivreg
+#' @importFrom miscTools stdEr
 #'
 #' @export
 #'
@@ -57,12 +59,12 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               asc.df[,code] <- as.character(asc.df[,code])
               asc.df <- rbind(c(as.numeric(base_alt),0),asc.df)
 
-              asc.se.weights <- data.frame(names(coef(s1.results)[asc.index]), 1/stdEr(s1.results)[asc.index])
+              asc.se.weights <- data.frame(names(coef(s1.results)[asc.index]), stdEr(s1.results)[asc.index])
               names(asc.se.weights) <- c(code, "se.weights")
               asc.se.weights[,code] <- as.character(asc.se.weights[,code])
               asc.se.weights <- rbind(c(as.numeric(base_alt),median(asc.se.weights$se.weights)),asc.se.weights)
 
-              dataalt <- asc.df %>% inner_join(X, by=code) %>% inner_join(asc.se.weights, by=code) %>% group_by_(code) %>% filter(row_number()==1)
+              data_alt <- asc.df %>% inner_join(X, by=code) %>% inner_join(asc.se.weights, by=code) %>% group_by_(code) %>% filter(row_number()==1)
 
           # De-mean the invididual data, not where dummies
               dummies.ind <- grep(TRUE, apply(datamat,2, function(x)  all(x %in% c(0,1)))) # identify dummy variables
@@ -88,22 +90,26 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               observed.count <- dat %>% group_by_(code) %>% summarise(observed.count = n())
 
           # Set prelimnary input variables for the iteration
-              xj.ite <- dataalt
-              yj <- data.matrix(dataalt[,"asc"])
-              formula <- formula(paste(colnames(yj),"~", paste(x, collapse = " + ")))
+              xj <- data_alt
+              yj <- data.matrix(data_alt[,"asc"])
+
+          # Run OLS to obtain preliminary results
+              formula_ols <- formula(paste(colnames(yj),"~", paste(x, collapse = " + ")))
+              formula_iv  <- formula(paste(c(formula_ols),"|",paste(c("instr", x[x!=endog]), collapse = " + ")))
+
+              ols_estimates <- lm(formula_ols ,data = data_alt, weights = 1/se.weights)
+              b <- coef(ols_estimates)
+
+              xj <- cbind(cons.=1,data.matrix(xj[,x]))
+              dimnames(xj)[1] <- data_alt[,code]
+              bij <- s1.results$estimate[!asc.index]
 
           # Iteration
           for (ite in n.iterations){
             print(paste("iteration",ite,sep = " "))
 
-            # Run OLS to obtain preliminary results
-                ols.res <- lm(formula ,data = xj.ite, weights = se.weights)
-
             # Generate instrument with contraction mapping
-                xj<- cbind(cons.=1,data.matrix(xj.ite[,x]))
-                dimnames(xj)[1] <- xj.ite[,code]
-                b <- solve(t(xj)%*%xj)%*%(t(xj)%*%yj)
-                bij <- s1.results$estimate[!asc.index]
+
                 Uij <- matrix(0,nrow=nrow(dat), ncol = nrow(xj))
 
                 difm<-100           # Reset convergence value of ite i
@@ -113,8 +119,8 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                         xij <- kronecker(t(datamat[i,z]),as.matrix(xj[,x]),  make.dimnames=TRUE)
                              col.order <- colnames(xij)
                              bij <- bij[col.order]
-                          #  row.order <-  paste0(":",c(base_alt,names(alts)))
-                          #  xij<- xij[row.order,col.order]
+                              #  row.order <-  paste0(":",c(base_alt,names(alts)))
+                              #  xij<- xij[row.order,col.order]
                         Uij[i,] <- xij %*% bij + xj %*% b
                     }
 
@@ -126,7 +132,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                     print(difm)
 
                     # expect_message(difm.ite>difm,difm.ite<difm,"No convergence")
-                    if (difm.ite<difm){
+                    if (difm.ite<difm | is.na(difm)){
                       convergence = FALSE
                       break
                     }
@@ -135,7 +141,10 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                 if (convergence == FALSE){
                   break
                 }
-                xj.ite[,endog.var] <- xj[,endog.var]
+
+                instr <- xj[,endog.var]
+                iv_estimates <- ivreg(formula_iv, data = data_alt, weights = 1/se.weights)
+                b <- coef(iv_estimates)
           }
 
   # Check output for convergence before returning results
@@ -143,13 +152,15 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
         if (convergence == TRUE){
           inst.var <- xj[,endog.var]
           print(inst.var)
-          inst.corr <- cor(xj[,endog.var],dataalt[,endog.var])
+          inst.corr <- cor(xj[,endog.var],data_alt[,endog.var])
+          print(summary(iv_estimates))
           print(paste("Correlation with endogenous variable == ",format(inst.corr,digits = 5),sep=" "))
         }else{
           inst.var <- NULL
           inst.corr <- NULL
+          iv_estimates <- NULL
           print("No convergence")
         }
 
-  return(list(sorting_inst = inst.var,inst.corr= inst.corr))
+  return(list(IV_results = iv_estimates, sorting_inst = inst.var,inst.corr= inst.corr))
 }
