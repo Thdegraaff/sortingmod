@@ -18,7 +18,7 @@ sorting_inst(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05)
 \item{stepsize}{Indicates the contraction-mapping scaling coefficient}
 }
 \value{
-A list containing (1) a vector of the computed instrument, and (2) the correlation between
+A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between
 the computed instrument and the original variable.
 }
 \description{
@@ -30,8 +30,10 @@ given no unobserved heterogeneity between alternative choices (following Bayer e
 }
 \examples{
 data <- municipality
-model_output <- first_stage("mun_code", c("age","income"),
-                c("lnprice","monuments"), data)
+model_output <- first_stage(code_name = "mun_code",
+                           X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
+                           Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
+                           dat = data)
 endog <- ("lnprice")
-phat <- sorting_inst(model_output, "lnprice", data)
+phat <- sorting_inst(model_output, "lnprice", data, stepsize = 0.02)
 }
