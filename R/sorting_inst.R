@@ -24,10 +24,12 @@
 #'
 #' @examples
 #' data <- municipality
-#' model_output <- first_stage("mun_code", c("age","income"),
-#'                 c("lnprice","monuments"), data)
+#' model_output <- first_stage(code_name = "mun_code",
+#'                            X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
+#'                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
+#'                            dat = data)
 #' endog <- ("lnprice")
-#' phat <- sorting_inst(model_output, "lnprice", data)
+#' phat <- sorting_inst(model_output, "lnprice", data, stepsize = 0.02)
 
 sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05){
 
@@ -81,7 +83,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               }
           # Step contraction-mapping coefficient
               if (stepsize!=0.05 & is.numeric(stepsize)){
-                stepsize = stepsize
+                stepsize.ite = stepsize
               }
           # Set convergence check
               convergence = TRUE
@@ -128,7 +130,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                     dif<- (colSums(pij) - observed.count[,-1])/sum(pij)
                     ldif<- log(colSums(pij)) - log(observed.count[,-1])
                     difm <- sqrt(max(as.matrix(dif)*as.matrix(dif)))
-                    xj[,endog.var]  <- as.matrix(xj[,endog.var] + stepsize*ldif*xj[,endog.var])
+                    xj[,endog.var]  <- as.matrix(xj[,endog.var] + stepsize.ite*ldif*xj[,endog.var])
                     print(difm)
 
                     # expect_message(difm.ite>difm,difm.ite<difm,"No convergence")
@@ -145,6 +147,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
                 instr <- xj[,endog.var]
                 iv_estimates <- ivreg(formula_iv, data = data_alt, weights = 1/se.weights)
                 b <- coef(iv_estimates)
+                stepsize.ite = stepsize * abs(ols_estimates$coefficients[endog]/iv_estimates$coefficients[endog]) # Rescale the stepsize
           }
 
   # Check output for convergence before returning results
