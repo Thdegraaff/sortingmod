@@ -23,11 +23,11 @@
 #' X_names <- c("lnprice","nature","monuments")
 #' data <- municipality
 #' model_output <- first_stage(code_name, Z_names, X_names, data)
-first_stage <- function(code_name, Z_names, X_names, data){
+first_stage <- function(code_name, Z_names, X_names, dat){
 
-  code  <- data[code_name]
-  Z     <- data[Z_names]
-  X     <- data[X_names]
+  code  <- dat[code_name]
+  Z     <- dat[Z_names]
+  X     <- dat[X_names]
 
   Z <- data.frame(code,Z)
   X <- data.frame(code,X)
