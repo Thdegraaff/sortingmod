@@ -78,12 +78,11 @@ The data for the estimation should be in data frame format, and it must contain:
 Users can work on their own data, or use the data which is saved in the workspace.
 
 ```{r, echo = FALSE}
-load("~/sortingmod/data/municipality_new.rda")
+load("~/sortingmod/data/municipality.rda")
 code_name <- c("mun_code")
 Z_names <- c("age","income","hh_kids")
 X_names <- c("lnprice","nature","monuments")
 head(municipality[,c("id",Z_names,code_name,X_names)])
-municipality <- subset(municipality, randstad ==1)
 ```
 
 Notes: 
