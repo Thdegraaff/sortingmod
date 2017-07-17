@@ -76,19 +76,19 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>sortingmod is a package for estimating the sorting model - a discrete choice model which explains the location decision of heterogeneous individuals over a set of alternative locations. The model is developed by Bayer et al. (2004) following the work of Berry et al. (1995). It relies on the assumptions that individuals choose a location that maximizes their utility, and that heterogeneous individuals with different characteristics have different preferences, and different valuation for location characteristics. The results of the model provide choice probabilities for each alternative, as well as insight on the valuation patterns of heterogeneous agents, and marginal willingness-to-pay values for location characteristics.</p>
+<p><code>sortingmod</code> is a package for estimating the sorting model - a discrete choice model which explains the location decision of heterogeneous individuals over a set of alternative locations. The model is developed by Bayer et al. (2004) following the work of Berry et al. (1995). It relies on the assumptions that individuals choose a location that maximizes their utility, and that heterogeneous individuals with different characteristics have different preferences, and different valuation for location characteristics. The results of the model provide choice probabilities for each alternative, as well as insight on the valuation patterns of heterogeneous agents, and marginal willingness-to-pay values for location characteristics.</p>
 <p>The package is constructed as an accompanying tool for the Summer School in “Hedonic price analysis and the residential location choice”, hosted by the Kraks Fond - Institute for Urban Economic Research (Copenhagen, Denmark).</p>
 </div>
 <div id="installation" class="section level2">
 <h2>Installation</h2>
-<div id="estimation-of-the-residential-sorting-model" class="section level3">
-<h3>Estimation of the residential sorting model</h3>
+</div>
+<div id="estimation-of-the-residential-sorting-model" class="section level2">
+<h2>Estimation of the residential sorting model</h2>
 <p><code>Sortingmod</code> package follows the methodology described in Bayer et al. (2004) to analyze how heterogeneous individuals sort themselves into alternative locations based on their preferneces for local characteristics.</p>
 <p><code>sortingmod</code> solves the following model:</p>
 <p><span class="math display">\[U_{j}^{i}  =  \sum_{k=1}^{K}\beta_{k,0}X_{k,j} + \sum_{k=1}^{K}\sum_{l=1}^{L}\beta_{k,l}(Z^{i}_{l}-\bar{Z_{l}})X_{k,j} + \xi_j + \epsilon_{j}^{i}\]</span></p>
 <p>Where: <span class="math inline">\(U_{j}^{i}\)</span> is the utility of individual <span class="math inline">\(i\)</span> from alternative <span class="math inline">\(j\)</span>, <span class="math inline">\(X_{k,j}\)</span> is the value of the <span class="math inline">\(k\)</span>-th alternative characteristic in location <span class="math inline">\(j\)</span>, <span class="math inline">\(Z^{i}_{l}\)</span> is the value of the <span class="math inline">\(l\)</span>-th characteristic of individual <span class="math inline">\(i\)</span>, <span class="math inline">\(\bar{Z_{l}}\)</span> is the sample mean of individual characteristic <span class="math inline">\(l\)</span>, <span class="math inline">\(\beta_{k,l}\)</span> is the cross effect coefficients, <span class="math inline">\(\xi_j\)</span> is an alternative specific error term, and <span class="math inline">\(\epsilon_{j}^{i}\)</span> is the individual error term.</p>
 <p>Due to likely correlation between prices and unobserved characteristics, it is necessary to estimate the sorting model in two stages.(See discussion in Berry et al. (1995)).</p>
-</div>
 <div id="first-stage" class="section level3">
 <h3>First stage</h3>
 <p>The first stage of the sorting model involves estimating the cross effect coefficients, and treating <span class="math inline">\(\delta_{j} = \sum_{k=1}^{K}\beta_{k,0}X_{k,j}\)</span> as alternative specific constants. Assuming that the random term is IID extreme value type I distributed, choice probabilities can be derived by a logit model estimation:</p>
@@ -142,10 +142,10 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li><code>X_names</code> - which indicates (with names or column numbers) the vectors with alternative data.</li>
 <li><code>data</code> - which indicates the Data to be used.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">code_name &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mun_code&quot;</span>)
-Z_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;age&quot;</span>,<span class="st">&quot;income&quot;</span>)
-X_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lnprice&quot;</span>,<span class="st">&quot;nature&quot;</span>,<span class="st">&quot;monuments&quot;</span>)
-<span class="co"># s1.results &lt;- first_stage(code_name, Z_names, X_names, data = municipality)</span></code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">code_name =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;mun_code&quot;</span>)
+X_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;lnprice&quot;</span>,<span class="st">&quot;kindergardens_1km&quot;</span>,<span class="st">&quot;p_mig_west&quot;</span>,<span class="st">&quot;nature&quot;</span>,<span class="st">&quot;monuments&quot;</span>,<span class="st">&quot;cafes_1km&quot;</span>)
+Z_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;income&quot;</span>,<span class="st">&quot;double_earner_hh&quot;</span>,<span class="st">&quot;hh_kids&quot;</span>,<span class="st">&quot;age&quot;</span>, <span class="st">&quot;migskill&quot;</span>)
+s1.results &lt;-<span class="st"> </span><span class="kw">first_stage</span>(code_name, Z_names, X_names, <span class="dt">data =</span> municipality)</code></pre></div>
 <p>s1.results is a (maxLik) object, containing the estimation results and all relevant information. Several methods can be called on the object, including <code>summary, coef,</code> and <code>stdEr</code>. Calling <code>summary</code> provides a neat summary of the estimation, including the coefficients and std. errors of the cross-effect coefficients and the alternative-specific constants, which will later be used in the second stage of the estiamtion.</p>
 </div>
 <div id="second-stage-estimation" class="section level3">
@@ -160,25 +160,48 @@ X_names &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st"
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">second_stage</span>(s1.results, data)
 
 endog &lt;-<span class="st"> </span>(<span class="st">&quot;lnprice&quot;</span>)
-<span class="kw">second_stage</span>(s1.results, data, <span class="dt">endog =</span> endog, <span class="dt">instr =</span> instrument)</code></pre></div>
+<span class="kw">second_stage</span>(s1.results, <span class="dt">data =</span> municipality, <span class="dt">endog =</span> endog, <span class="dt">instr =</span> instrument)</code></pre></div>
 <p>Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features. For this reason the <code>second_stage</code> function allows (and encourages) users to include instruments in this part of the model estimation, using the options <code>endog</code> to indicate the endogenous variable(s), and <code>instrument</code> to indicate the chose instrument(s).</p>
 </div>
-<div id="calculating-the-natural-instrument" class="section level3">
-<h3>Calculating the natural instrument</h3>
-<p>However, <code>sortingmod</code> also includes the function <code>sorting_inst</code>, that generates an instrument following Bayer et al. (2004). The calculation of the instrument utilizes the equilibrium properties of the model, and results in an instrument which clears the market assuming no correlation exists with unobserved heterogeneity between alternatives.</p>
+<div id="calculating-the-market-equilibrium-instrument" class="section level3">
+<h3>Calculating the market equilibrium instrument</h3>
+<p><code>sortingmod</code> also includes the function <code>sorting_inst</code>, which generates an instrument which rises “naturally” from the model and utilizes its equilibrium properties, following Bayer et al. (2004). The calculated instrument is an instrument which clears the market assuming no correlation exists with unobserved heterogeneity between alternatives, and it is calculated in an interative process based on the results of the first stage of the estimation process.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">endog &lt;-<span class="st"> </span>(<span class="st">&quot;lnprice&quot;</span>)
-phat &lt;-<span class="st"> </span><span class="kw">sorting_inst</span>(s1.results, endog, data, <span class="dt">n.iterations =</span> <span class="dv">3</span>, <span class="dt">stepsize =</span> <span class="fl">0.05</span>)</code></pre></div>
+phat &lt;-<span class="st"> </span><span class="kw">sorting_inst</span>(s1.results, endog, <span class="dt">data =</span> municipality, <span class="dt">stepsize =</span> <span class="fl">0.02</span>)</code></pre></div>
 <p><code>sorting_inst</code> takes several (non-optional) arguments:</p>
 <ul>
 <li><code>s1.results</code> - which indicates the (maxLik) object estimation results of the first stage of the sorting model.</li>
 <li><code>endog</code> - which indicates the endogenous variable to be instrumented.</li>
 <li><code>data</code> Dataset to be used.</li>
 </ul>
-<p>Unlike <code>first_stage</code>, <code>sorting_inst</code> does not take chosen alternatives, individual characteristics or alternative characteristics as arguments. This is because they are already specified as arguments in the <code>s1.results</code> object. However, note that <code>dat</code> must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in <code>X_names</code>).</p>
-<p><code>sorting_inst</code> returns a list <code>inst.var</code> which contains (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between the computed instrument and the original variable.</p>
+<p>Unlike <code>first_stage</code>, <code>sorting_inst</code> does not take chosen alternatives, individual characteristics or alternative characteristics as arguments. This is because they are already specified as arguments in the <code>s1.results</code> object. However, note that <code>data</code> must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in <code>X_names</code>).</p>
+<p><code>sorting_inst</code> returns a list which contains (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between the computed instrument and the original variable.</p>
+<pre><code>## 
+## Call:
+## ivreg(formula = formula_iv, data = data_alt, weights = 1/se.weights)
+## 
+## Residuals:
+##       Min        1Q    Median        3Q       Max 
+## -25.39717  -3.63648   0.07974   4.27760  19.50532 
+## 
+## Coefficients:
+##                   Estimate Std. Error t value Pr(&gt;|t|)    
+## (Intercept)       322.6482    93.9647   3.434 0.000803 ***
+## lnprice           -26.9416     7.7619  -3.471 0.000708 ***
+## kindergardens_1km   0.3002     0.3559   0.843 0.400537    
+## p_mig_west          0.5586     0.1965   2.843 0.005203 ** 
+## nature              7.6055     3.5850   2.121 0.035810 *  
+## monuments           0.9410     0.3745   2.513 0.013215 *  
+## cafes_1km          -0.4035     0.1633  -2.470 0.014822 *  
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 7.624 on 128 degrees of freedom
+## Multiple R-Squared: -4.699,  Adjusted R-squared: -4.966 
+## Wald test: 3.742 on 6 and 128 DF,  p-value: 0.001831</code></pre>
 <p>Notes:</p>
 <ul>
-<li>The iteration breaks if it identifies that values are not converging. Lack of convergence can be due to too much unobserved heterogeneity in the model, but it may also be that the contraction mapping coefficient (<code>stepstize</code> argument) is too large, which cause the iteration to overshoot. So before updating your model, try to experiment and choose lower stepsize values.</li>
+<li>The iteration process breaks if it identifies that values are not converging. Lack of convergence can be due to too much unobserved heterogeneity in the model, but it may also be that the contraction mapping coefficient (<code>stepstize</code> argument) is too large, which cause the iteration to overshoot. So before updating your model, try to experiment and choose lower stepsize values.</li>
 <li><code>sorting_inst</code> accepts only one argument for endogenous variable as input, and subsequently also returns only a single vector as instrument.</li>
 </ul>
 </div>
@@ -193,221 +216,6 @@ phat &lt;-<span class="st"> </span><span class="kw">sorting_inst</span>(s1.resul
 <p>Bayer, P., McMillan, R., &amp; Rueben, K. (2004). An equilibrium model of sorting in an urban housing market (No. w10865). National Bureau of Economic Research.</p>
 <p>Berry, S., Levinsohn, J., &amp; Pakes, A. (1995). Automobile prices in market equilibrium. Econometrica: Journal of the Econometric Society, 841-890.</p>
 </div>
-<div id="appendix" class="section level3">
-<h3>Appendix</h3>
-</div>
-<div id="section" class="section level3">
-<h3>.</h3>
-</div>
-<div id="section-1" class="section level3">
-<h3>.</h3>
-</div>
-<div id="vignette-defaults" class="section level3">
-<h3>Vignette defaults</h3>
-<p>Vignettes are long form documentation commonly included in packages. Because they are part of the distribution of the package, they need to be as compact as possible. The <code>html_vignette</code> output type provides a custom style sheet (and tweaks some options) to ensure that the resulting html is as small as possible. The <code>html_vignette</code> format:</p>
-<ul>
-<li>Never uses retina figures</li>
-<li>Has a smaller default figure size</li>
-<li>Uses a custom CSS stylesheet instead of the default Twitter Bootstrap style</li>
-</ul>
-</div>
-</div>
-<div id="vignette-info" class="section level2">
-<h2>Vignette Info</h2>
-<p>Note the various macros within the <code>vignette</code> section of the metadata block above. These are required in order to instruct R how to build the vignette. Note that you should change the <code>title</code> field and the <code>\VignetteIndexEntry</code> to match the title of your vignette.</p>
-</div>
-<div id="styles" class="section level2">
-<h2>Styles</h2>
-<p>The <code>html_vignette</code> template includes a basic CSS theme. To override this theme you can specify your own CSS in the document metadata as follows:</p>
-<pre><code>output: 
-  rmarkdown::html_vignette:
-    css: mystyles.css</code></pre>
-</div>
-<div id="figures" class="section level2">
-<h2>Figures</h2>
-<p>The figure sizes have been customised so that you can easily put two images side-by-side.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">plot</span>(<span class="dv">1</span>:<span class="dv">10</span>)
-<span class="kw">plot</span>(<span class="dv">10</span>:<span class="dv">1</span>)</code></pre></div>
-<p><img src="data:image/png;base64,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" /><img src="data:image/png;base64,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" /></p>
-<p>You can enable figure captions by <code>fig_caption: yes</code> in YAML:</p>
-<pre><code>output:
-  rmarkdown::html_vignette:
-    fig_caption: yes</code></pre>
-<p>Then you can use the chunk option <code>fig.cap = &quot;Your figure caption.&quot;</code> in <strong>knitr</strong>.</p>
-</div>
-<div id="more-examples" class="section level2">
-<h2>More Examples</h2>
-<p>You can write math expressions, e.g. <span class="math inline">\(Y = X\beta + \epsilon\)</span>, footnotes<a href="#fn1" class="footnoteRef" id="fnref1"><sup>1</sup></a>, and tables, e.g. using <code>knitr::kable()</code>.</p>
-<table>
-<thead>
-<tr class="header">
-<th></th>
-<th align="right">mpg</th>
-<th align="right">cyl</th>
-<th align="right">disp</th>
-<th align="right">hp</th>
-<th align="right">drat</th>
-<th align="right">wt</th>
-<th align="right">qsec</th>
-<th align="right">vs</th>
-<th align="right">am</th>
-<th align="right">gear</th>
-<th align="right">carb</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td>Mazda RX4</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160.0</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.620</td>
-<td align="right">16.46</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td>Mazda RX4 Wag</td>
-<td align="right">21.0</td>
-<td align="right">6</td>
-<td align="right">160.0</td>
-<td align="right">110</td>
-<td align="right">3.90</td>
-<td align="right">2.875</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-<tr class="odd">
-<td>Datsun 710</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">108.0</td>
-<td align="right">93</td>
-<td align="right">3.85</td>
-<td align="right">2.320</td>
-<td align="right">18.61</td>
-<td align="right">1</td>
-<td align="right">1</td>
-<td align="right">4</td>
-<td align="right">1</td>
-</tr>
-<tr class="even">
-<td>Hornet 4 Drive</td>
-<td align="right">21.4</td>
-<td align="right">6</td>
-<td align="right">258.0</td>
-<td align="right">110</td>
-<td align="right">3.08</td>
-<td align="right">3.215</td>
-<td align="right">19.44</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td>Hornet Sportabout</td>
-<td align="right">18.7</td>
-<td align="right">8</td>
-<td align="right">360.0</td>
-<td align="right">175</td>
-<td align="right">3.15</td>
-<td align="right">3.440</td>
-<td align="right">17.02</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td>Valiant</td>
-<td align="right">18.1</td>
-<td align="right">6</td>
-<td align="right">225.0</td>
-<td align="right">105</td>
-<td align="right">2.76</td>
-<td align="right">3.460</td>
-<td align="right">20.22</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">1</td>
-</tr>
-<tr class="odd">
-<td>Duster 360</td>
-<td align="right">14.3</td>
-<td align="right">8</td>
-<td align="right">360.0</td>
-<td align="right">245</td>
-<td align="right">3.21</td>
-<td align="right">3.570</td>
-<td align="right">15.84</td>
-<td align="right">0</td>
-<td align="right">0</td>
-<td align="right">3</td>
-<td align="right">4</td>
-</tr>
-<tr class="even">
-<td>Merc 240D</td>
-<td align="right">24.4</td>
-<td align="right">4</td>
-<td align="right">146.7</td>
-<td align="right">62</td>
-<td align="right">3.69</td>
-<td align="right">3.190</td>
-<td align="right">20.00</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-</tr>
-<tr class="odd">
-<td>Merc 230</td>
-<td align="right">22.8</td>
-<td align="right">4</td>
-<td align="right">140.8</td>
-<td align="right">95</td>
-<td align="right">3.92</td>
-<td align="right">3.150</td>
-<td align="right">22.90</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">2</td>
-</tr>
-<tr class="even">
-<td>Merc 280</td>
-<td align="right">19.2</td>
-<td align="right">6</td>
-<td align="right">167.6</td>
-<td align="right">123</td>
-<td align="right">3.92</td>
-<td align="right">3.440</td>
-<td align="right">18.30</td>
-<td align="right">1</td>
-<td align="right">0</td>
-<td align="right">4</td>
-<td align="right">4</td>
-</tr>
-</tbody>
-</table>
-<p>Also a quote using <code>&gt;</code>:</p>
-<blockquote>
-<p>“He who gives up [code] safety for [code] speed deserves neither.” (<a href="https://twitter.com/hadleywickham/status/504368538874703872">via</a>)</p>
-</blockquote>
-</div>
-<div class="footnotes">
-<hr />
-<ol>
-<li id="fn1"><p>A footnote here.<a href="#fnref1">↩</a></p></li>
-</ol>
 </div>
 
 

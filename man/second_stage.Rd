@@ -27,12 +27,14 @@ if an instrument variable procedure is needed both the instrument and the endoge
 }
 \examples{
 data <- municipality
-model_output <- first_stage("mun_code", c("age","income"),
-                c("lnprice","monuments"), data)
+s1.results <- first_stage(code_name = "mun_code",
+                         X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
+                         Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
+                         data = data)
 endog <- ("lnprice")
-phat <- sorting_inst(model_output, "lnprice", data)
+phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 
-second_stage(model_output, data)
-second_stage(model_output, data, "lnprice", phat[[1]])
+second_stage(s1.results, data)
+second_stage(s1.results, data, "lnprice", phat[[1]])
 
 }

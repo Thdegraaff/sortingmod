@@ -30,5 +30,5 @@ code_name <- c("mun_code")
 Z_names <- c("age","income")
 X_names <- c("lnprice","nature","monuments")
 data <- municipality
-model_output <- first_stage(code_name, Z_names, X_names, data)
+s1.results <- first_stage(code_name, Z_names, X_names, data)
 }
