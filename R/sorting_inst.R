@@ -99,7 +99,7 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
 
           # Run OLS to obtain preliminary results
               formula_ols <- formula(paste(colnames(yj),"~", paste(x, collapse = " + ")))
-              formula_iv  <- formula(paste(c(formula_ols),"|",paste(c("instr", x[x!=endog]), collapse = " + ")))
+              formula_iv  <- formula(paste(c(formula_ols),"|", paste(c("instr", x[x!=endog]), collapse = " + ")))
 
               ols_estimates <- lm(formula_ols ,data = data_alt, weights = 1/se.weights)
               b <- coef(ols_estimates)
