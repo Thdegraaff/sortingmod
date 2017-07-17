@@ -24,12 +24,12 @@
 #'
 #' @examples
 #' data <- municipality
-#' model_output <- first_stage(code_name = "mun_code",
+#' s1.results <- first_stage(code_name = "mun_code",
 #'                            X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
 #'                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
 #'                            data = data)
 #' endog <- ("lnprice")
-#' phat <- sorting_inst(model_output, "lnprice", data, stepsize = 0.02)
+#' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 
 sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0.05){
 
@@ -111,6 +111,7 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
           # Iteration
           for (ite in n.iterations){
             print(paste("iteration",ite,sep = " "))
+            print("sqrt dif max value: ")
 
             # Generate instrument with contraction mapping
 
@@ -133,7 +134,7 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
                     ldif<- log(colSums(pij)) - log(observed.count[,-1])
                     difm <- sqrt(max(as.matrix(dif)*as.matrix(dif)))
                     xj[,endog.var]  <- as.matrix(xj[,endog.var] + stepsize.ite*ldif*xj[,endog.var])
-                    print(difm)
+                    print(format(difm,digits = 5))
 
                     # expect_message(difm.ite>difm,difm.ite<difm,"No convergence")
                     if (difm.ite<difm | is.na(difm)){
@@ -159,7 +160,7 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
           print(inst.var)
           inst.corr <- cor(xj[,endog.var],data_alt[,endog.var])
           print(summary(iv_estimates))
-          print(paste("Correlation with endogenous variable == ",format(inst.corr,digits = 5),sep=" "))
+          print(paste("Correlation with endogenous variable == ",format(inst.corr,digits = 4),sep=" "))
         }else{
           inst.var <- NULL
           inst.corr <- NULL
