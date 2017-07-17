@@ -6,8 +6,8 @@
 #'
 #' @param s1.results Indicates the (maxLik) object estimation results of the first stage of the sorting model
 #' @param dat Dataset to be used
-#' @param endog Indicates the endogenous variable to be instrumented (from the dataset in parentheses)
-#' @param instr indicates  the intrument for the endogenous variable
+#' @param endog Indicates the endogenous variable(s) to be instrumented (from the dataset in parentheses)
+#' @param instr indicates the intrument(s) for the endogenous variable
 #'
 #' @return An estimation object
 #'
@@ -20,13 +20,15 @@
 #'
 #' @examples
 #' data <- municipality
-#' model_output <- first_stage("mun_code", c("age","income"),
-#'                 c("lnprice","monuments"), data)
+#' s1.results <- first_stage(code_name = "mun_code",
+#'                          X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
+#'                          Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
+#'                          data = data)
 #' endog <- ("lnprice")
-#' phat <- sorting_inst(model_output, "lnprice", data)
+#' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 #'
-#' second_stage(model_output, data)
-#' second_stage(model_output, data, "lnprice", phat[[1]])
+#' second_stage(s1.results, data)
+#' second_stage(s1.results, data, "lnprice", phat[[1]])
 #'
 second_stage <- function(s1.results, data, endog = NULL, instr = NULL){
 
