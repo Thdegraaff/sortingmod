@@ -4,14 +4,14 @@
 \alias{sorting_inst}
 \title{Calculates an instrument for an endogenous variable in a sorting model setting}
 \usage{
-sorting_inst(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05)
+sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05)
 }
 \arguments{
 \item{s1.results}{Indicates the (maxLik) object estimation results of the first stage of the sorting model}
 
 \item{endog}{Indicates the endogenous variable to be instrumented}
 
-\item{dat}{Dataset to be used}
+\item{data}{Dataset to be used}
 
 \item{n.iterations}{Indicates the number of iterations}
 
@@ -33,7 +33,7 @@ data <- municipality
 model_output <- first_stage(code_name = "mun_code",
                            X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
-                           dat = data)
+                           data = data)
 endog <- ("lnprice")
 phat <- sorting_inst(model_output, "lnprice", data, stepsize = 0.02)
 }

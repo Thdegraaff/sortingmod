@@ -4,7 +4,7 @@
 \alias{first_stage}
 \title{Estimates the first stage of a sorting model}
 \usage{
-first_stage(code_name, Z_names, X_names, dat)
+first_stage(code_name, Z_names, X_names, data)
 }
 \arguments{
 \item{code_name}{Indicates (with name or column number) the vector with alternative chosen}
@@ -13,7 +13,7 @@ first_stage(code_name, Z_names, X_names, dat)
 
 \item{X_names}{Indicates (with names or column numbers) the vectors with alternative data}
 
-\item{dat}{Dataset to be used}
+\item{data}{Dataset to be used}
 }
 \value{
 A (maxLik) object with the estimates (maxLik) together with the indicators of the alternative chosen,

@@ -4,16 +4,16 @@
 \alias{second_stage}
 \title{Title Estimates the second of a sorting model}
 \usage{
-second_stage(s1.results, dat, endog = NULL, instr = NULL)
+second_stage(s1.results, data, endog = NULL, instr = NULL)
 }
 \arguments{
 \item{s1.results}{Indicates the (maxLik) object estimation results of the first stage of the sorting model}
 
+\item{endog}{Indicates the endogenous variable(s) to be instrumented (from the dataset in parentheses)}
+
+\item{instr}{indicates the intrument(s) for the endogenous variable}
+
 \item{dat}{Dataset to be used}
-
-\item{endog}{Indicates the endogenous variable to be instrumented (from the dataset in parentheses)}
-
-\item{instr}{indicates  the intrument for the endogenous variable}
 }
 \value{
 An estimation object
