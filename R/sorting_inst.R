@@ -7,7 +7,7 @@
 #'
 #' @param s1.results Indicates the (maxLik) object estimation results of the first stage of the sorting model
 #' @param endog Indicates the endogenous variable to be instrumented
-#' @param dat Dataset to be used
+#' @param data Dataset to be used
 #' @param n.iterations Indicates the number of iterations
 #' @param stepsize Indicates the contraction-mapping scaling coefficient
 #'
@@ -27,11 +27,11 @@
 #' model_output <- first_stage(code_name = "mun_code",
 #'                            X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
 #'                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
-#'                            dat = data)
+#'                            data = data)
 #' endog <- ("lnprice")
 #' phat <- sorting_inst(model_output, "lnprice", data, stepsize = 0.02)
 
-sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.05){
+sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0.05){
 
   # Prepare inputs
 
@@ -41,7 +41,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               code <- s1.results$code_name
               base_alt <- s1.results$base_alt
 
-              datamat <- data.matrix(dat[,c(code,z)])
+              datamat <- data.matrix(data[,c(code,z)])
 
               endog.var = endog
               if (!(endog.var %in% x)){
@@ -50,7 +50,7 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
               }
 
           # Set the alternative characteristics and asc's for the initial OLS estimation
-              X <- data.frame(dat[code],dat[x])
+              X <- data.frame(data[code],data[x])
                   X[,code] <- as.character(X[,code])
 
               asc.index <- names(s1.results$estimate)  %in%  as.character(X[,code])
@@ -84,12 +84,14 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
           # Step contraction-mapping coefficient
               if (stepsize!=0.05 & is.numeric(stepsize)){
                 stepsize.ite = stepsize
+              }else{
+                stepsize.ite = 0.05
               }
           # Set convergence check
               convergence = TRUE
 
           # Calculate observed count in each alternative.
-              observed.count <- dat %>% group_by_(code) %>% summarise(observed.count = n())
+              observed.count <- data %>% group_by_(code) %>% summarise(observed.count = n())
 
           # Set prelimnary input variables for the iteration
               xj <- data_alt
@@ -112,12 +114,12 @@ sorting_inst <- function(s1.results, endog, dat, n.iterations = 3, stepsize = 0.
 
             # Generate instrument with contraction mapping
 
-                Uij <- matrix(0,nrow=nrow(dat), ncol = nrow(xj))
+                Uij <- matrix(0,nrow=nrow(data), ncol = nrow(xj))
 
                 difm<-100           # Reset convergence value of ite i
                 difm.ite <- difm    # Reset convergence value of ite i-1
                 while (difm>0.0005){
-                    for (i in 1:nrow(dat)){
+                    for (i in 1:nrow(data)){
                         xij <- kronecker(t(datamat[i,z]),as.matrix(xj[,x]),  make.dimnames=TRUE)
                              col.order <- colnames(xij)
                              bij <- bij[col.order]
