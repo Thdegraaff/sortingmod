@@ -28,7 +28,7 @@
 #' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 #'
 #' second_stage(s1.results, data)
-#' second_stage(s1.results, data, "lnprice", phat[[1]])
+#' second_stage(s1.results, data, "lnprice", phat$sorting_inst)
 #'
 second_stage <- function(s1.results, data, endog = NULL, instr = NULL){
 
@@ -46,7 +46,10 @@ second_stage <- function(s1.results, data, endog = NULL, instr = NULL){
   x <-      s1.results$X_names # coefficients of alternatives
   code <-   s1.results$code_name # indicators of the alternative chosen,
   base_alt <- s1.results$base_alt # base alternative that is left out
-  instr <- data.frame(instr) # Store instrument in data.frame, if it isn't one already (useful to get the column names for the formula)
+  if (!is.null(instr)){
+    instr <- data.frame(instr) # Store instrument in data.frame, if it isn't one already (useful to get the column names for the formula)
+  }
+
 
   # Combine alternative chosen and coefficients of alternatives
   X <- data.frame(data[code],data[x])
@@ -87,9 +90,12 @@ second_stage <- function(s1.results, data, endog = NULL, instr = NULL){
   formula_ols <- formula(paste("asc~", paste(x, collapse = " + ")))
   formula_iv  <- formula(paste("asc~", paste(x, collapse = " + "),"|",
                               #  paste(x, collapse = " + "),"-", paste(endog), "+ instr"))
-                              paste(x, collapse = " + "), "-",
-                              paste(endog, collapse = " - "), " + ",
-                              paste(names(instr),collapse=" + ")))
+                              paste(x, collapse = " + "), " + ",
+                              paste(names(instr),collapse=" + "),
+                              "-",paste(endog, collapse = " - ")))
+
+                 # formula(paste("asc~", paste(x, collapse = " + "),"|",
+                 #                paste(c(paste(names(instr)), x[x!=endog]), collapse = " + ")))
 
   # Do estimation; if no instrument is given just OLS; otherwise ivreg from the AER package
   if (is.null(instr)) {
