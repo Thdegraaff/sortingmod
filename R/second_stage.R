@@ -87,20 +87,17 @@ second_stage <- function(s1.results, data, endog = NULL, instr = NULL){
     filter(row_number()==1)
 
   # Build the model formulae
-  formula_ols <- formula(paste("asc~", paste(x, collapse = " + ")))
-  formula_iv  <- formula(paste("asc~", paste(x, collapse = " + "),"|",
-                              #  paste(x, collapse = " + "),"-", paste(endog), "+ instr"))
-                              paste(x, collapse = " + "), " + ",
-                              paste(names(instr),collapse=" + "),
-                              "-",paste(endog, collapse = " - ")))
-
-                 # formula(paste("asc~", paste(x, collapse = " + "),"|",
-                 #                paste(c(paste(names(instr)), x[x!=endog]), collapse = " + ")))
+    # formula_ols <- formula(paste("asc~", paste(x, collapse = " + ")))
+    # formula_iv  <- formula(paste("asc~", paste(x, collapse = " + "),"|",
+                                #  paste(x, collapse = " + "),"-", paste(endog), "+ instr"))
 
   # Do estimation; if no instrument is given just OLS; otherwise ivreg from the AER package
   if (is.null(instr)) {
+    formula_ols <- formula(paste("asc~", paste(x, collapse = " + ")))
     estimates <- lm(formula_ols, data = data_alt, weights = 1/se.weights)
   } else {
+    formula_iv  <- formula(paste("asc~", paste(x, collapse = " + "),"|",
+                                 paste(c(paste(names(instr)), x[x!=endog]), collapse = " + ")))
     estimates <- ivreg(formula_iv, data = data_alt, weights = 1/se.weights)
   }
 

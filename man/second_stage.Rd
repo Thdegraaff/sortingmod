@@ -35,6 +35,6 @@ endog <- ("lnprice")
 phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 
 second_stage(s1.results, data)
-second_stage(s1.results, data, "lnprice", phat[[1]])
+second_stage(s1.results, data, "lnprice", phat$sorting_inst)
 
 }
