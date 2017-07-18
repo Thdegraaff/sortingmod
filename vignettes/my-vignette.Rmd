@@ -14,9 +14,6 @@ vignette: >
 
 The package is constructed as an accompanying tool for the Summer School in “Hedonic price analysis and the residential location choice”, hosted by the Kraks Fond - Institute for Urban Economic Research (Copenhagen, Denmark).
 
-## Installation
-
-
 
 ## Estimation of the residential sorting model
 `Sortingmod` package follows the methodology described in Bayer et al. (2004) to analyze how heterogeneous individuals sort themselves into alternative locations based on their preferneces for local characteristics. 
@@ -58,11 +55,19 @@ Since prices are likely to be correlated with the error term $\xi_j$ the second 
 Here, we follow the approach of \citet{Bayer2004} for instrument construction and construct a price instrument assuming no correlation exists with unobserved location heterogeneity. Namely, we compute the price vector which would clear the market under the assumption of $(\xi_j = 0)$.
 
 
-## Quick start
+## Quick user guide
 
+### Installation 
 The purpose of this section is to give a general sense of the package, its components and an overview of how to use it. 
+`sortingmod` is not currently available from CRAN, but you can install the development version from github with:
 
-First, we load the package :
+```{r, eval=FALSE}
+# install.packages("devtools")
+devtools::install_github("thdegraaff/sortingmod")
+```
+
+Once installation is completed, the package can be loaded.
+
 ```{r}
 library(sortingmod)
 ```
@@ -161,9 +166,16 @@ Notes:
 
 ## Post estimation
 ### Marginal willingness-to-pay values
+
+The sorting model allows calculating the marginal willingness to pay (MWTP) for the various alternative characteristics examined of each type of individual (with distinct observable characteristics). 
+These MWTP values give a clear overview of the impact of different alternative characteristics on the location choice of heterogeneous individuals, with respect to the monetary value price of a standard house. 
+With the full estimation results in hand, the computation of the marginal willingness to pay is relatively simple (see detailed explanation in Bayer et al (2004), Van Duijn and Rouwendal (2013)). 
+
 ### References
 
 Bayer, P., McMillan, R., & Rueben, K. (2004). An equilibrium model of sorting in an urban housing market (No. w10865). National Bureau of Economic Research.
 
 Berry, S., Levinsohn, J., & Pakes, A. (1995). Automobile prices in market equilibrium. Econometrica: Journal of the Econometric Society, 841-890.
+
+van Duijn, M., Rouwendal, J., sep 2013. Cultural heritage and the location choice of Dutch households in a residential sorting model. Journal of Economic Geography 13 (3), 473–500
 
