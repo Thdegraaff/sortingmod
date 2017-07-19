@@ -59,10 +59,11 @@ Here, we follow the approach of \citet{Bayer2004} for instrument construction an
 
 ### Installation 
 The purpose of this section is to give a general sense of the package, its components and an overview of how to use it. 
-`sortingmod` is not currently available from CRAN, but you can install the development version from github with:
+`sortingmod` is not currently available from CRAN, but you can install the development version from github with (note that you need to install the package `devtools` to be able to install packages from GitHub:
 
 ```{r, eval=FALSE}
 # install.packages("devtools")
+# library("devtools")
 devtools::install_github("thdegraaff/sortingmod")
 ```
 
@@ -83,7 +84,7 @@ The data for the estimation should be in data frame format, and it must contain:
 Users can work on their own data, or use the data which is saved in the workspace.
 
 ```{r, echo = FALSE}
-load("~/sortingmod/data/municipality.rda")
+data <- municipality
 code_name <- c("mun_code")
 Z_names <- c("age","income","hh_kids")
 X_names <- c("lnprice","nature","monuments")

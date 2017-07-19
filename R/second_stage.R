@@ -23,7 +23,8 @@
 #' s1.results <- first_stage(code_name = "mun_code",
 #'                          X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
 #'                          Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
-#'                          data = data)
+#'                          data = data,
+#'                          print_detail = 1)
 #' endog <- ("lnprice")
 #' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 #'

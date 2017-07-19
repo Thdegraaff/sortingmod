@@ -18,8 +18,8 @@ sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05)
 \item{stepsize}{Indicates the contraction-mapping scaling coefficient}
 }
 \value{
-A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between
-the computed instrument and the original variable.
+A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, (3) the correlation between
+the computed instrument and the original variable, and (4) the vector of the endogenous variable
 }
 \description{
 Calculates an instrument for an endogenous variable in a sorting model setting
@@ -33,7 +33,10 @@ data <- municipality
 s1.results <- first_stage(code_name = "mun_code",
                            X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
-                           data = data)
+                           data = data,
+                           print_detail = 1)
 endog <- ("lnprice")
 phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
+plot(phat[[2]], phat[[4]], xlab="Instrument", ylab="Endogeneous variable")
+
 }

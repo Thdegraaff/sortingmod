@@ -1,8 +1,13 @@
+## ---- eval=FALSE---------------------------------------------------------
+#  # install.packages("devtools")
+#  # library("devtools")
+#  devtools::install_github("thdegraaff/sortingmod")
+
 ## ------------------------------------------------------------------------
 library(sortingmod)
 
 ## ---- echo = FALSE-------------------------------------------------------
-load("~/sortingmod/data/municipality.rda")
+data <- municipality
 code_name <- c("mun_code")
 Z_names <- c("age","income","hh_kids")
 X_names <- c("lnprice","nature","monuments")

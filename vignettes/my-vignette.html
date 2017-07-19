@@ -12,7 +12,7 @@
 
 <meta name="author" content="Thomas de Graaff and Or Levkovich" />
 
-<meta name="date" content="2017-07-17" />
+<meta name="date" content="2017-07-18" />
 
 <title>sortingmod</title>
 
@@ -70,7 +70,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">sortingmod</h1>
 <h4 class="author"><em>Thomas de Graaff and Or Levkovich</em></h4>
-<h4 class="date"><em>2017-07-17</em></h4>
+<h4 class="date"><em>2017-07-18</em></h4>
 
 
 
@@ -78,9 +78,6 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h2>Introduction</h2>
 <p><code>sortingmod</code> is a package for estimating the sorting model - a discrete choice model which explains the location decision of heterogeneous individuals over a set of alternative locations. The model is developed by Bayer et al. (2004) following the work of Berry et al. (1995). It relies on the assumptions that individuals choose a location that maximizes their utility, and that heterogeneous individuals with different characteristics have different preferences, and different valuation for location characteristics. The results of the model provide choice probabilities for each alternative, as well as insight on the valuation patterns of heterogeneous agents, and marginal willingness-to-pay values for location characteristics.</p>
 <p>The package is constructed as an accompanying tool for the Summer School in “Hedonic price analysis and the residential location choice”, hosted by the Kraks Fond - Institute for Urban Economic Research (Copenhagen, Denmark).</p>
-</div>
-<div id="installation" class="section level2">
-<h2>Installation</h2>
 </div>
 <div id="estimation-of-the-residential-sorting-model" class="section level2">
 <h2>Estimation of the residential sorting model</h2>
@@ -106,11 +103,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <p>Since prices are likely to be correlated with the error term <span class="math inline">\(\xi_j\)</span> the second stage estimation follows a two stage least squares (2SLS) procedure to account for this endogeneity problem. Here, we follow the approach of  for instrument construction and construct a price instrument assuming no correlation exists with unobserved location heterogeneity. Namely, we compute the price vector which would clear the market under the assumption of <span class="math inline">\((\xi_j = 0)\)</span>.</p>
 </div>
 </div>
-<div id="quick-start" class="section level2">
-<h2>Quick start</h2>
-<p>The purpose of this section is to give a general sense of the package, its components and an overview of how to use it.</p>
-<p>First, we load the package :</p>
+<div id="quick-user-guide" class="section level2">
+<h2>Quick user guide</h2>
+<div id="installation" class="section level3">
+<h3>Installation</h3>
+<p>The purpose of this section is to give a general sense of the package, its components and an overview of how to use it. <code>sortingmod</code> is not currently available from CRAN, but you can install the development version from github with (note that you need to install the package <code>devtools</code> to be able to install packages from GitHub:</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages(&quot;devtools&quot;)</span>
+<span class="co"># library(&quot;devtools&quot;)</span>
+devtools::<span class="kw">install_github</span>(<span class="st">&quot;thdegraaff/sortingmod&quot;</span>)</code></pre></div>
+<p>Once installation is completed, the package can be loaded.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sortingmod)</code></pre></div>
+</div>
 <div id="data-structure" class="section level3">
 <h3>Data structure</h3>
 <p>The data for the estimation should be in data frame format, and it must contain:</p>
@@ -210,11 +213,13 @@ phat &lt;-<span class="st"> </span><span class="kw">sorting_inst</span>(s1.resul
 <h2>Post estimation</h2>
 <div id="marginal-willingness-to-pay-values" class="section level3">
 <h3>Marginal willingness-to-pay values</h3>
+<p>The sorting model allows calculating the marginal willingness to pay (MWTP) for the various alternative characteristics examined of each type of individual (with distinct observable characteristics). These MWTP values give a clear overview of the impact of different alternative characteristics on the location choice of heterogeneous individuals, with respect to the monetary value price of a standard house. With the full estimation results in hand, the computation of the marginal willingness to pay is relatively simple (see detailed explanation in Bayer et al (2004), Van Duijn and Rouwendal (2013)).</p>
 </div>
 <div id="references" class="section level3">
 <h3>References</h3>
 <p>Bayer, P., McMillan, R., &amp; Rueben, K. (2004). An equilibrium model of sorting in an urban housing market (No. w10865). National Bureau of Economic Research.</p>
 <p>Berry, S., Levinsohn, J., &amp; Pakes, A. (1995). Automobile prices in market equilibrium. Econometrica: Journal of the Econometric Society, 841-890.</p>
+<p>van Duijn, M., Rouwendal, J., sep 2013. Cultural heritage and the location choice of Dutch households in a residential sorting model. Journal of Economic Geography 13 (3), 473–500</p>
 </div>
 </div>
 

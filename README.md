@@ -6,10 +6,11 @@ The package is constructed as an accompanying tool for the Summer School in “H
 
 # Installation
 
-`sortingmod` is not currently available from CRAN, but you can install the development version from github with:
+`sortingmod` is not currently available from CRAN, but you can install the development version from github with (note that you need to install the package `devtools` to be able to install packages from GitHub:
 
 ```r
 # install.packages("devtools")
+# library("devtools")
 devtools::install_github("thdegraaff/sortingmod")
 ```
 

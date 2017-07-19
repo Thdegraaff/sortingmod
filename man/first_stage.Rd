@@ -4,7 +4,7 @@
 \alias{first_stage}
 \title{Estimates the first stage of a sorting model}
 \usage{
-first_stage(code_name, Z_names, X_names, data)
+first_stage(code_name, Z_names, X_names, data, print_detail = 3)
 }
 \arguments{
 \item{code_name}{Indicates (with name or column number) the vector with alternative chosen}
@@ -14,6 +14,8 @@ first_stage(code_name, Z_names, X_names, data)
 \item{X_names}{Indicates (with names or column numbers) the vectors with alternative data}
 
 \item{data}{Dataset to be used}
+
+\item{print_detail}{Controls the output detail of maxLik (default is set at 3)}
 }
 \value{
 A (maxLik) object with the estimates (maxLik) together with the indicators of the alternative chosen,
@@ -30,5 +32,5 @@ code_name <- c("mun_code")
 Z_names <- c("age","income")
 X_names <- c("lnprice","nature","monuments")
 data <- municipality
-s1.results <- first_stage(code_name, Z_names, X_names, data)
+s1.results <- first_stage(code_name, Z_names, X_names, data, print_detail = 1)
 }

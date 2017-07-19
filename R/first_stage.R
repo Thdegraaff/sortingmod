@@ -7,6 +7,7 @@
 #' @param Z_names Indicates (with names or column numbers) the vectors with individual data
 #' @param X_names Indicates (with names or column numbers) the vectors with alternative data
 #' @param data Dataset to be used
+#' @param print_detail Controls the output detail of maxLik (default is set at 3)
 #'
 #' @return A (maxLik) object with the estimates (maxLik) together with the indicators of the alternative chosen,
 #'  the vectors with individual data, the vectors with city/regional data and the name of the reference alternative
@@ -22,8 +23,8 @@
 #' Z_names <- c("age","income")
 #' X_names <- c("lnprice","nature","monuments")
 #' data <- municipality
-#' s1.results <- first_stage(code_name, Z_names, X_names, data)
-first_stage <- function(code_name, Z_names, X_names, data){
+#' s1.results <- first_stage(code_name, Z_names, X_names, data, print_detail = 1)
+first_stage <- function(code_name, Z_names, X_names, data, print_detail = 3){
 
   code  <- data[code_name]
   Z     <- data[Z_names]
@@ -82,7 +83,7 @@ first_stage <- function(code_name, Z_names, X_names, data){
 
   gradlik <- function(param) gradi
 
-  estimates <- maxLik(LogLikFun, gradlik, start=startValues, print.level=3, method = "BHHH")
+  estimates <- maxLik(LogLikFun, gradlik, start=startValues, print.level=print_detail, method = "BHHH")
 
   estimates$code_name <- code_name
   estimates$Z_names <- Z_names

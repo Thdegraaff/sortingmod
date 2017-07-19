@@ -11,11 +11,11 @@
 #' @param n.iterations Indicates the number of iterations
 #' @param stepsize Indicates the contraction-mapping scaling coefficient
 #'
-#' @return A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between
-#' the computed instrument and the original variable.
+#' @return A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, (3) the correlation between
+#' the computed instrument and the original variable, and (4) the vector of the endogenous variable
 #'
 #' @importFrom magrittr %>%
-#' @importFrom dplyr group_by_ summarise inner_join filter
+#' @importFrom dplyr pull group_by_ summarise inner_join filter
 #' @importFrom maxLik maxLik
 #' @importFrom AER ivreg
 #' @importFrom miscTools stdEr
@@ -25,12 +25,15 @@
 #' @examples
 #' data <- municipality
 #' s1.results <- first_stage(code_name = "mun_code",
-#'                            X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
+#'                            X_names = c("lnprice","kindergardens_1km","p_mig_west",
+#'                                        "nature","monuments","cafes_1km"),
 #'                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
-#'                            data = data)
+#'                            data = data,
+#'                            print_detail = 1)
 #' endog <- ("lnprice")
 #' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
-
+#' plot(phat[[2]], phat[[4]], xlab="Instrument", ylab="Endogeneous variable")
+#'
 sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0.05){
 
   # Prepare inputs
@@ -159,6 +162,7 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
           inst.var <- xj[,endog.var]
           print(inst.var)
           inst.corr <- cor(xj[,endog.var],data_alt[,endog.var])
+          lnprice <- pull(data_alt[,endog.var], lnprice)
           print(summary(iv_estimates))
           print(paste("Correlation with endogenous variable == ",format(inst.corr,digits = 4),sep=" "))
         }else{
@@ -168,5 +172,5 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
           print("No convergence")
         }
 
-  return(list(IV_results = iv_estimates, sorting_inst = inst.var,inst.corr= inst.corr))
+  return(list(IV_results = iv_estimates, sorting_inst = inst.var,inst.corr= inst.corr, endogenous = lnprice))
 }
