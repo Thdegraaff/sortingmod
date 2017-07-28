@@ -84,11 +84,11 @@ The data for the estimation should be in data frame format, and it must contain:
 Users can work on their own data, or use the data which is saved in the workspace.
 
 ```{r, echo = FALSE}
-data <- municipality
-code_name <- c("mun_code")
-Z_names <- c("age","income","hh_kids")
-X_names <- c("lnprice","nature","monuments")
-head(municipality[,c("id",Z_names,code_name,X_names)])
+  data <- municipality
+  code_name <- c("mun_code")
+  Z_names <- c("age","income","hh_kids")
+  X_names <- c("lnprice","nature","monuments")
+  head(municipality[,c("id",Z_names,code_name,X_names)])
 ```
 
 Notes: 
@@ -106,10 +106,10 @@ The function `first_stage` is used in order to estimate the first stage of the m
 - `data` - which indicates the Data to be used.
 
 ```{r, results = "hide"}
-code_name = c("mun_code")
-X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km")
-Z_names = c("income","double_earner_hh","hh_kids","age", "migskill")
-s1.results <- first_stage(code_name, Z_names, X_names, data = municipality)
+  code_name = c("mun_code")
+  X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km")
+  Z_names = c("income","double_earner_hh","hh_kids","age", "migskill")
+  s1.results <- first_stage(code_name, Z_names, X_names, data = municipality, print_detail = 1)
 ```
 
 s1.results is a (maxLik) object, containing the estimation results and all relevant information. Several methods can be called on the object, including `summary, coef,` and `stdEr`. Calling `summary` provides a neat summary of the estimation, including the coefficients and std. errors of the cross-effect coefficients and the alternative-specific constants, which will later be used in the second stage of the estiamtion. 
@@ -126,10 +126,10 @@ The function `second_stage` is used in order to estimate the first stage of the 
 
 
 ```{r, eval = FALSE}
-second_stage(s1.results, data)
-
-endog <- ("lnprice")
-second_stage(s1.results, data = municipality, endog = endog, instr = instrument)
+  second_stage(s1.results, data)
+  
+  endog <- ("lnprice")
+  second_stage(s1.results, data = municipality, endog = endog, instr = instrument)
 ```
 
 Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features. For this reason the `second_stage` function allows (and encourages) users to include instruments in this part of the model estimation, using the options `endog` to indicate the endogenous variable(s), and `instrument` to indicate the chose instrument(s).
@@ -140,8 +140,8 @@ Before estimating the second stage of the model it is important to consider that
 The calculated instrument is an instrument which clears the market assuming no correlation exists with unobserved heterogeneity between alternatives, and it is calculated in an interative process based on the results of the first stage of the estimation process.
 
 ```{r, results = "hide"}
-endog <- ("lnprice")
-phat <- sorting_inst(s1.results, endog, data = municipality, stepsize = 0.02)
+  endog <- ("lnprice")
+  phat <- sorting_inst(s1.results, endog, data = municipality, stepsize = 0.02)
 ```
 
 `sorting_inst` takes several (non-optional) arguments: 
@@ -155,7 +155,7 @@ However, note that `data` must indicate the same data used for the first stage e
 
 `sorting_inst` returns a list which contains (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between the computed instrument and the original variable.
 
-```{r, echo = FALSE}
+```{r}
 summary(phat$IV_results)
 ```
 
@@ -165,7 +165,6 @@ Notes:
 - `sorting_inst` accepts only one argument for endogenous variable as input, and subsequently also returns only a single vector as instrument. 
 
 
-## Post estimation
 ### Marginal willingness-to-pay values
 
 The sorting model allows calculating the marginal willingness to pay (MWTP) for the various alternative characteristics examined of each type of individual (with distinct observable characteristics). 
