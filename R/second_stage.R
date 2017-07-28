@@ -5,7 +5,7 @@
 #'
 #'
 #' @param s1.results Indicates the (maxLik) object estimation results of the first stage of the sorting model
-#' @param dat Dataset to be used
+#' @param data Dataset to be used
 #' @param endog Indicates the endogenous variable(s) to be instrumented (from the dataset in parentheses)
 #' @param instr indicates the intrument(s) for the endogenous variable
 #'
