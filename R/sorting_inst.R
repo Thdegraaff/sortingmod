@@ -32,7 +32,7 @@
 #'                            print_detail = 1)
 #' endog <- ("lnprice")
 #' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
-#' plot(phat[[2]], phat[[4]], xlab="Instrument", ylab="Endogeneous variable")
+#' plot(phat$sorting_inst, phat$endogenous, xlab="Instrument", ylab="Endogeneous variable")
 #'
 sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0.05){
 
@@ -162,15 +162,16 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
           inst.var <- xj[,endog.var]
           print(inst.var)
           inst.corr <- cor(xj[,endog.var],data_alt[,endog.var])
-          lnprice <- pull(data_alt[,endog.var], lnprice)
+          endog.var <- pull(data_alt[,endog.var], endog.var)
           print(summary(iv_estimates))
           print(paste("Correlation with endogenous variable == ",format(inst.corr,digits = 4),sep=" "))
         }else{
           inst.var <- NULL
           inst.corr <- NULL
           iv_estimates <- NULL
+          endog.var <- NULL
           print("No convergence")
         }
 
-  return(list(IV_results = iv_estimates, sorting_inst = inst.var,inst.corr= inst.corr, endogenous = lnprice))
+  return(list(IV_results = iv_estimates, sorting_inst = inst.var,inst.corr= inst.corr, endogenous = endog.var))
 }

@@ -31,12 +31,13 @@ given no unobserved heterogeneity between alternative choices (following Bayer e
 \examples{
 data <- municipality
 s1.results <- first_stage(code_name = "mun_code",
-                           X_names = c("lnprice","kindergardens_1km","p_mig_west","nature","monuments","cafes_1km"),
+                           X_names = c("lnprice","kindergardens_1km","p_mig_west",
+                                       "nature","monuments","cafes_1km"),
                            Z_names = c("income","double_earner_hh","hh_kids","age", "migskill"),
                            data = data,
                            print_detail = 1)
 endog <- ("lnprice")
 phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
-plot(phat[[2]], phat[[4]], xlab="Instrument", ylab="Endogeneous variable")
+plot(phat$sorting_inst, phat$endogenous, xlab="Instrument", ylab="Endogeneous variable")
 
 }
