@@ -1,4 +1,3 @@
-
 #' Calculates an instrument for an endogenous variable in a sorting model setting
 #'
 #' @details
