@@ -20,7 +20,7 @@ Once installation is completed, the package can be loaded.
 library(sortingmod)
 ```
 
-# Components
+# Components 
 
 - `first_stage(code_name, Z_names, X_names, data, print_detail = 3)` - Estimates the first stage of a sorting model
 - `second_stage(s1.results, data, endog = NULL, instr = NULL)` - Estimates the second of a sorting model
