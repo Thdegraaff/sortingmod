@@ -1,4 +1,4 @@
-#' Title Estimates the second of a sorting model
+#' Estimates the second of a sorting model
 #'
 #' @details This function estimates an OLS or an instrument variable.
 #' if an instrument variable procedure is needed both the instrument and the endogenous variables should be given
@@ -28,8 +28,8 @@
 #' endog <- ("lnprice")
 #' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 #'
-#' second_stage(s1.results, data)
-#' second_stage(s1.results, data, "lnprice", phat$sorting_inst)
+#' s2.results <- second_stage(s1.results, data)
+#' s2.results <- second_stage(s1.results, data, "lnprice", phat$sorting_inst)
 #'
 second_stage <- function(s1.results, data, endog = NULL, instr = NULL){
 
