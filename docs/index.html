@@ -75,14 +75,39 @@
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="co"># install.packages("devtools")</span>
 <span class="co"># library("devtools")</span>
 devtools::<span class="kw">install_github</span>(<span class="st">"thdegraaff/sortingmod"</span>)</code></pre></div>
+<p>Once installation is completed, the package can be loaded.</p>
+<pre class="{r}"><code>library(sortingmod)</code></pre>
 </div>
 <div id="components" class="section level1">
 <h1 class="hasAnchor">
 <a href="#components" class="anchor"></a>Components</h1>
+<ul>
+<li>
+<code><a href="reference/first_stage.html">first_stage(code_name, Z_names, X_names, data, print_detail = 3)</a></code> - Estimates the first stage of a sorting model</li>
+<li>
+<code><a href="reference/second_stage.html">second_stage(s1.results, data, endog = NULL, instr = NULL)</a></code> - Estimates the second of a sorting model</li>
+<li>
+<code><a href="reference/sorting_inst.html">sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05)</a></code> - Calculates an instrument for an endogenous variable in a sorting model setting</li>
+</ul>
+<p>The data for the estimation should be in data frame format, and it must contain:</p>
+<ul>
+<li>One or more columns indicating characteristics (<code>Z_names</code>) of a unique agent making a discrete choice between available alternatives (individuals, households, etc.).</li>
+<li>A vector indicating the chosen alternative (<code>code_name</code>).</li>
+<li>One or more columns indicating characteristics (<code>X_names</code>) of the chosen alternative.</li>
+<li>Each row of the data frame should represent a unique individual. The number of alternatives should therefore be smaller or equal to the number of individuals.</li>
+<li>Individual and alternative characteristics should be numeric variables. Factor variables are not yet supported, so it’s best to transform them into numeric dummy variables if you intend to include them in the model.</li>
+</ul>
+</div>
+<div id="usage" class="section level1">
+<h1 class="hasAnchor">
+<a href="#usage" class="anchor"></a>Usage</h1>
+<p>Define dataset, alternative identifier variable and explanatory variable sets X and Z <code>{r, eval = FALSE}     data &lt;- municipality</code> Estimate the first stage of the sorting model <code>{r, eval = FALSE}     X.vars &lt;- c("lnprice","nature","monuments","schools_3km")     Z.vars &lt;- c("income","double_earner_hh","hh_kids","age")     Alt.var = "mun_code"     s1.results &lt;- first_stage(code_name = Alt.var,                                X_names = X.vars                                Z_names = Z.vars,                                data = data,                                print_detail = 1)</code> Estimate the second stage of the model, assuming exogeneity of explanatory variables <code>{r, eval = FALSE}    s2.results &lt;- second_stage(s1.results, data)</code> Define endogenous variables and calculate an instrument based on equilibrium conditions. Estimate the second stage of the sorting model using the calculated instrument. <code>{r, eval = FALSE}     endog &lt;- ("lnprice")     phat &lt;- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)     plot(phat$sorting_inst, phat$endogenous, xlab="Instrument", ylab="Endogeneous variable")</code> Estimate the second stage of the model, using instruments for the endogenous variables. ```{r, eval = FALSE} instruments &lt;- cbind(sorting_inst = phat$sorting_inst, historical.monuments = monuments) s2.results &lt;- second_stage(s1.results, data, c(“lnprice”,“cafes_1km”), instruments)</p>
+<p>```</p>
 </div>
 <div id="getting-help" class="section level1">
 <h1 class="hasAnchor">
 <a href="#getting-help" class="anchor"></a>Getting help</h1>
+<p>If you need assistance using <code>sortingmod</code>, you can get in touch by emailing <a href="t.de.graaff@vu.nl" class="uri">t.de.graaff@vu.nl</a> or <a href="o.d.levkovich@vu.nl" class="uri">o.d.levkovich@vu.nl</a>.</p>
 </div>
 <div id="references" class="section level1">
 <h1 class="hasAnchor">

@@ -65,7 +65,7 @@
       <h1>sortingmod</h1>
                         <h4 class="author">Thomas de Graaff and Or Levkovich</h4>
             
-            <h4 class="date">2017-07-18</h4>
+            <h4 class="date">2017-07-31</h4>
           </div>
 
     
@@ -117,8 +117,6 @@
 devtools::<span class="kw">install_github</span>(<span class="st">"thdegraaff/sortingmod"</span>)</code></pre></div>
 <p>Once installation is completed, the package can be loaded.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(sortingmod)</code></pre></div>
-<pre><code>## Warning: Installed Rcpp (0.12.12) different from Rcpp used to build dplyr (0.12.11).
-## Please reinstall dplyr to avoid random crashes or undefined behavior.</code></pre>
 </div>
 <div id="data-structure" class="section level3">
 <h3 class="hasAnchor">
@@ -157,10 +155,10 @@ devtools::<span class="kw">install_github</span>(<span class="st">"thdegraaff/so
 <li>
 <code>data</code> - which indicates the Data to be used.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">code_name =<span class="st"> </span><span class="kw">c</span>(<span class="st">"mun_code"</span>)
-X_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">"lnprice"</span>,<span class="st">"kindergardens_1km"</span>,<span class="st">"p_mig_west"</span>,<span class="st">"nature"</span>,<span class="st">"monuments"</span>,<span class="st">"cafes_1km"</span>)
-Z_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">"income"</span>,<span class="st">"double_earner_hh"</span>,<span class="st">"hh_kids"</span>,<span class="st">"age"</span>, <span class="st">"migskill"</span>)
-s1.results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/first_stage.html">first_stage</a></span>(code_name, Z_names, X_names, <span class="dt">data =</span> municipality)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  code_name =<span class="st"> </span><span class="kw">c</span>(<span class="st">"mun_code"</span>)
+  X_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">"lnprice"</span>,<span class="st">"kindergardens_1km"</span>,<span class="st">"p_mig_west"</span>,<span class="st">"nature"</span>,<span class="st">"monuments"</span>,<span class="st">"cafes_1km"</span>)
+  Z_names =<span class="st"> </span><span class="kw">c</span>(<span class="st">"income"</span>,<span class="st">"double_earner_hh"</span>,<span class="st">"hh_kids"</span>,<span class="st">"age"</span>, <span class="st">"migskill"</span>)
+  s1.results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/first_stage.html">first_stage</a></span>(code_name, Z_names, X_names, <span class="dt">data =</span> municipality, <span class="dt">print_detail =</span> <span class="dv">1</span>)</code></pre></div>
 <p>s1.results is a (maxLik) object, containing the estimation results and all relevant information. Several methods can be called on the object, including <code>summary, coef,</code> and <code>stdEr</code>. Calling <code>summary</code> provides a neat summary of the estimation, including the coefficients and std. errors of the cross-effect coefficients and the alternative-specific constants, which will later be used in the second stage of the estiamtion.</p>
 </div>
 <div id="second-stage-estimation" class="section level3">
@@ -177,18 +175,19 @@ s1.results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/
 <li>
 <code>instr</code> - (optional) which indicates the intrument(s) for the endogenous variable.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, data)
-
-endog &lt;-<span class="st"> </span>(<span class="st">"lnprice"</span>)
-<span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, <span class="dt">data =</span> municipality, <span class="dt">endog =</span> endog, <span class="dt">instr =</span> instrument)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, data)
+  
+  endog &lt;-<span class="st"> </span>(<span class="st">"lnprice"</span>)
+  <span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, <span class="dt">data =</span> municipality, <span class="dt">endog =</span> endog, <span class="dt">instr =</span> instrument)</code></pre></div>
 <p>Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features. For this reason the <code>second_stage</code> function allows (and encourages) users to include instruments in this part of the model estimation, using the options <code>endog</code> to indicate the endogenous variable(s), and <code>instrument</code> to indicate the chose instrument(s).</p>
 </div>
 <div id="calculating-the-market-equilibrium-instrument" class="section level3">
 <h3 class="hasAnchor">
 <a href="#calculating-the-market-equilibrium-instrument" class="anchor"></a>Calculating the market equilibrium instrument</h3>
 <p><code>sortingmod</code> also includes the function <code>sorting_inst</code>, which generates an instrument which rises “naturally” from the model and utilizes its equilibrium properties, following Bayer et al. (2004). The calculated instrument is an instrument which clears the market assuming no correlation exists with unobserved heterogeneity between alternatives, and it is calculated in an interative process based on the results of the first stage of the estimation process.</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">endog &lt;-<span class="st"> </span>(<span class="st">"lnprice"</span>)
-phat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sorting_inst.html">sorting_inst</a></span>(s1.results, endog, <span class="dt">data =</span> municipality, <span class="dt">stepsize =</span> <span class="fl">0.02</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  endog &lt;-<span class="st"> </span>(<span class="st">"lnprice"</span>)
+  phat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sorting_inst.html">sorting_inst</a></span>(s1.results, endog, <span class="dt">data =</span> municipality, <span class="dt">stepsize =</span> <span class="fl">0.02</span>)</code></pre></div>
+<pre><code>## Warning: package 'bindrcpp' was built under R version 3.4.1</code></pre>
 <p><code>sorting_inst</code> takes several (non-optional) arguments:</p>
 <ul>
 <li>
@@ -200,6 +199,7 @@ phat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sortin
 </ul>
 <p>Unlike <code>first_stage</code>, <code>sorting_inst</code> does not take chosen alternatives, individual characteristics or alternative characteristics as arguments. This is because they are already specified as arguments in the <code>s1.results</code> object. However, note that <code>data</code> must indicate the same data used for the first stage estimation, and that the indicated endogenous variable must be included in the set of alternative characteristics used in the estimation (and specified in <code>X_names</code>).</p>
 <p><code>sorting_inst</code> returns a list which contains (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, and (3) the correlation between the computed instrument and the original variable.</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">summary</span>(phat$IV_results)</code></pre></div>
 <pre><code>## 
 ## Call:
 ## ivreg(formula = formula_iv, data = data_alt, weights = 1/se.weights)
@@ -230,10 +230,6 @@ phat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sortin
 <code>sorting_inst</code> accepts only one argument for endogenous variable as input, and subsequently also returns only a single vector as instrument.</li>
 </ul>
 </div>
-</div>
-<div id="post-estimation" class="section level2">
-<h2 class="hasAnchor">
-<a href="#post-estimation" class="anchor"></a>Post estimation</h2>
 <div id="marginal-willingness-to-pay-values" class="section level3">
 <h3 class="hasAnchor">
 <a href="#marginal-willingness-to-pay-values" class="anchor"></a>Marginal willingness-to-pay values</h3>
@@ -258,7 +254,6 @@ phat &lt;-<span class="st"> </span><span class="kw"><a href="../reference/sortin
 <li><a href="#introduction">Introduction</a></li>
       <li><a href="#estimation-of-the-residential-sorting-model">Estimation of the residential sorting model</a></li>
       <li><a href="#quick-user-guide">Quick user guide</a></li>
-      <li><a href="#post-estimation">Post estimation</a></li>
       </ul>
 </div>
       </div>
