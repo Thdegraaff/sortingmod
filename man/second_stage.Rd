@@ -2,24 +2,24 @@
 % Please edit documentation in R/second_stage.R
 \name{second_stage}
 \alias{second_stage}
-\title{Title Estimates the second of a sorting model}
+\title{Estimates the second of a sorting model}
 \usage{
 second_stage(s1.results, data, endog = NULL, instr = NULL)
 }
 \arguments{
 \item{s1.results}{Indicates the (maxLik) object estimation results of the first stage of the sorting model}
 
+\item{data}{Dataset to be used}
+
 \item{endog}{Indicates the endogenous variable(s) to be instrumented (from the dataset in parentheses)}
 
 \item{instr}{indicates the intrument(s) for the endogenous variable}
-
-\item{dat}{Dataset to be used}
 }
 \value{
 An estimation object
 }
 \description{
-Title Estimates the second of a sorting model
+Estimates the second of a sorting model
 }
 \details{
 This function estimates an OLS or an instrument variable.
@@ -35,7 +35,7 @@ s1.results <- first_stage(code_name = "mun_code",
 endog <- ("lnprice")
 phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 
-second_stage(s1.results, data)
-second_stage(s1.results, data, "lnprice", phat$sorting_inst)
+s2.results <- second_stage(s1.results, data)
+s2.results <- second_stage(s1.results, data, "lnprice", phat$sorting_inst)
 
 }

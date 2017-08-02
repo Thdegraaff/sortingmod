@@ -4,7 +4,7 @@
 \name{municipality}
 \alias{municipality}
 \title{A test dataset of individual locational choices}
-\format{A data frame with 9,074 rows and 19 variables:}
+\format{A data frame with 9,848 rows and 33 variables:}
 \usage{
 municipality
 }
