@@ -126,10 +126,11 @@ The function `second_stage` is used in order to estimate the first stage of the 
 
 
 ```{r, eval = FALSE}
-  second_stage(s1.results, data)
+  s2.results <- second_stage(s1.results, data)
   
   endog <- ("lnprice")
-  second_stage(s1.results, data = municipality, endog = endog, instr = instrument)
+  s2.results <- second_stage(s1.results, data = municipality, endog = endog, instr = instrument)
+  summary(s2.results)
 ```
 
 Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features. For this reason the `second_stage` function allows (and encourages) users to include instruments in this part of the model estimation, using the options `endog` to indicate the endogenous variable(s), and `instrument` to indicate the chose instrument(s).
