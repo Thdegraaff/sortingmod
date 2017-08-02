@@ -65,7 +65,7 @@
       <h1>sortingmod</h1>
                         <h4 class="author">Thomas de Graaff and Or Levkovich</h4>
             
-            <h4 class="date">2017-08-01</h4>
+            <h4 class="date">2017-08-02</h4>
           </div>
 
     
@@ -175,10 +175,11 @@ devtools::<span class="kw">install_github</span>(<span class="st">"thdegraaff/so
 <li>
 <code>instr</code> - (optional) which indicates the intrument(s) for the endogenous variable.</li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  <span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, data)
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">  s2.results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, data)
   
   endog &lt;-<span class="st"> </span>(<span class="st">"lnprice"</span>)
-  <span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, <span class="dt">data =</span> municipality, <span class="dt">endog =</span> endog, <span class="dt">instr =</span> instrument)</code></pre></div>
+  s2.results &lt;-<span class="st"> </span><span class="kw"><a href="../reference/second_stage.html">second_stage</a></span>(s1.results, <span class="dt">data =</span> municipality, <span class="dt">endog =</span> endog, <span class="dt">instr =</span> instrument)
+  <span class="kw">summary</span>(s2.results)</code></pre></div>
 <p>Before estimating the second stage of the model it is important to consider that some alternative characteristics are likely to be endogenous. For example, local price levels are very likely to be correlated with unobserved alternative features. For this reason the <code>second_stage</code> function allows (and encourages) users to include instruments in this part of the model estimation, using the options <code>endog</code> to indicate the endogenous variable(s), and <code>instrument</code> to indicate the chose instrument(s).</p>
 </div>
 <div id="calculating-the-market-equilibrium-instrument" class="section level3">
