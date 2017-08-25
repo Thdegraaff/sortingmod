@@ -9,6 +9,7 @@
 #' @param data Dataset to be used
 #' @param n.iterations Indicates the number of iterations
 #' @param stepsize Indicates the contraction-mapping scaling coefficient
+#' @param threshold Indicates the convergence threshold
 #'
 #' @return A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, (3) the correlation between
 #' the computed instrument and the original variable, and (4) the vector of the endogenous variable
@@ -33,7 +34,7 @@
 #' phat <- sorting_inst(s1.results, "lnprice", data, stepsize = 0.02)
 #' plot(phat$sorting_inst, phat$endogenous, xlab="Instrument", ylab="Endogeneous variable")
 #'
-sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0.05){
+sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0.05, threshold = 0.0005){
 
   # Prepare inputs
 
@@ -89,6 +90,14 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
               }else{
                 stepsize.ite = 0.05
               }
+
+          # Set iteration convergence threshold
+              if (threshold!=0.0005 & is.numeric(threshold)){
+                difm.threshold = threshold
+              }else{
+                difm.threshold = threshold
+              }
+
           # Set convergence check
               convergence = TRUE
 
@@ -121,7 +130,7 @@ sorting_inst <- function(s1.results, endog, data, n.iterations = 3, stepsize = 0
 
                 difm<-100           # Reset convergence value of ite i
                 difm.ite <- difm    # Reset convergence value of ite i-1
-                while (difm>0.0005){
+                while (difm>difm.threshold){
                     for (i in 1:nrow(data)){
                         xij <- kronecker(t(datamat[i,z]),as.matrix(xj[,x]),  make.dimnames=TRUE)
                              col.order <- colnames(xij)

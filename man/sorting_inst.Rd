@@ -4,7 +4,8 @@
 \alias{sorting_inst}
 \title{Calculates an instrument for an endogenous variable in a sorting model setting}
 \usage{
-sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05)
+sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05,
+  threshold = 5e-04)
 }
 \arguments{
 \item{s1.results}{Indicates the (maxLik) object estimation results of the first stage of the sorting model}
