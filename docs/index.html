@@ -83,11 +83,11 @@ devtools::<span class="kw">install_github</span>(<span class="st">"thdegraaff/so
 <a href="#components" class="anchor"></a>Components</h1>
 <ul>
 <li>
-<code><a href="reference/first_stage.html">first_stage(code_name, Z_names, X_names, data, print_detail = 3)</a></code> - Estimates the first stage of a sorting model</li>
+<code><a href="reference/first_stage.html">first_stage(code_name, Z_names, X_names, data, print_detail = 3)</a></code> - Estimates the first stage of a. sorting model</li>
 <li>
 <code><a href="reference/second_stage.html">second_stage(s1.results, data, endog = NULL, instr = NULL)</a></code> - Estimates the second of a sorting model</li>
 <li>
-<code><a href="reference/sorting_inst.html">sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05)</a></code> - Calculates an instrument for an endogenous variable in a sorting model setting</li>
+<code><a href="reference/sorting_inst.html">sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05, threshold = 0.0005)</a></code> - Calculates an instrument for an endogenous variable in a sorting model setting</li>
 </ul>
 <p>The data for the estimation should be in data frame format, and it must contain:</p>
 <ul>
