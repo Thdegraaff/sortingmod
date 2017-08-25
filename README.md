@@ -22,9 +22,9 @@ library(sortingmod)
 
 # Components 
 
-- `first_stage(code_name, Z_names, X_names, data, print_detail = 3)` - Estimates the first stage of a sorting model
+- `first_stage(code_name, Z_names, X_names, data, print_detail = 3)` - Estimates the first stage of a. sorting model
 - `second_stage(s1.results, data, endog = NULL, instr = NULL)` - Estimates the second of a sorting model
-- `sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05)` - Calculates an instrument for an endogenous variable in a sorting model setting
+- `sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05, threshold = 0.0005)` - Calculates an instrument for an endogenous variable in a sorting model setting
 
 
 The data for the estimation should be in data frame format, and it must contain: 
