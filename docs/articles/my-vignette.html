@@ -65,7 +65,7 @@
       <h1>sortingmod</h1>
                         <h4 class="author">Thomas de Graaff and Or Levkovich</h4>
             
-            <h4 class="date">2017-08-02</h4>
+            <h4 class="date">2017-08-25</h4>
           </div>
 
     
@@ -226,7 +226,7 @@ devtools::<span class="kw">install_github</span>(<span class="st">"thdegraaff/so
 ## Wald test: 3.742 on 6 and 128 DF,  p-value: 0.001831</code></pre>
 <p>Notes:</p>
 <ul>
-<li>The iteration process breaks if it identifies that values are not converging. Lack of convergence can be due to too much unobserved heterogeneity in the model, but it may also be that the contraction mapping coefficient (<code>stepstize</code> argument) is too large, which cause the iteration to overshoot. So before updating your model, try to experiment and choose lower stepsize values.</li>
+<li>The iteration process breaks if it identifies that values are not converging. Lack of convergence can be due to too much unobserved heterogeneity in the model, but it may also be that the contraction mapping coefficient (<code>stepstize</code> argument) is too large, which cause the iteration to overshoot. So before updating your model, try to experiment and choose lower stepsize values. In case convergence is not reached even though values are sufficiently close to zero, the threshold can be adjust by providing new input value using the <code>threshold</code> argument.</li>
 <li>
 <code>sorting_inst</code> accepts only one argument for endogenous variable as input, and subsequently also returns only a single vector as instrument.</li>
 </ul>
