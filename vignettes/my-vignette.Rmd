@@ -162,7 +162,7 @@ summary(phat$IV_results)
 
 Notes: 
 
-- The iteration process breaks if it identifies that values are not converging. Lack of convergence can be due to too much unobserved heterogeneity in the model, but it may also be that the contraction mapping coefficient (`stepstize` argument) is too large, which cause the iteration to overshoot. So before updating your model, try to experiment and choose lower stepsize values.
+- The iteration process breaks if it identifies that values are not converging. Lack of convergence can be due to too much unobserved heterogeneity in the model, but it may also be that the contraction mapping coefficient (`stepstize` argument) is too large, which cause the iteration to overshoot. So before updating your model, try to experiment and choose lower stepsize values. In case convergence is not reached even though values are sufficiently close to zero, the threshold can be adjust by providing new input value using the `threshold` argument.
 - `sorting_inst` accepts only one argument for endogenous variable as input, and subsequently also returns only a single vector as instrument. 
 
 
