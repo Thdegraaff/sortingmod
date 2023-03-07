@@ -13,7 +13,7 @@
 #'
 #' @importFrom miscTools stdEr
 #' @importFrom magrittr %>%
-#' @importFrom dplyr group_by_ inner_join group_by
+#' @importFrom dplyr group_by_ inner_join group_by row_number
 #' @importFrom AER ivreg
 #'
 #' @export

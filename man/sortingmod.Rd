@@ -3,7 +3,6 @@
 \docType{package}
 \name{sortingmod}
 \alias{sortingmod}
-\alias{sortingmod-package}
 \title{sortingmod: a package for the estimation of sorting models}
 \description{
 The sortingmod package provides two important functions:

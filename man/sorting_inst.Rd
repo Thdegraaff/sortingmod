@@ -4,8 +4,14 @@
 \alias{sorting_inst}
 \title{Calculates an instrument for an endogenous variable in a sorting model setting}
 \usage{
-sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05,
-  threshold = 5e-04)
+sorting_inst(
+  s1.results,
+  endog,
+  data,
+  n.iterations = 3,
+  stepsize = 0.05,
+  threshold = 5e-04
+)
 }
 \arguments{
 \item{s1.results}{Indicates the (maxLik) object estimation results of the first stage of the sorting model}
@@ -17,6 +23,8 @@ sorting_inst(s1.results, endog, data, n.iterations = 3, stepsize = 0.05,
 \item{n.iterations}{Indicates the number of iterations}
 
 \item{stepsize}{Indicates the contraction-mapping scaling coefficient}
+
+\item{threshold}{Indicates the convergence threshold}
 }
 \value{
 A list containing (1) Results of the IV estimation, with the computed vector as instrument for the endogenous variable. (2) a vector of the computed instrument, (3) the correlation between

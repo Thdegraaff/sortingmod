@@ -15,7 +15,7 @@
 #' the computed instrument and the original variable, and (4) the vector of the endogenous variable
 #'
 #' @importFrom magrittr %>%
-#' @importFrom dplyr pull group_by_ summarise inner_join filter
+#' @importFrom dplyr pull group_by_ summarise inner_join filter n
 #' @importFrom maxLik maxLik
 #' @importFrom AER ivreg
 #' @importFrom miscTools stdEr
